@@ -11,18 +11,19 @@ async function main() {
     try { return JSON.parse((await run(gh, ['api', '--hostname', 'github.com', route], opts)).stdout); }
     catch (e) { if (/HTTP 404/.test(e.stderr || '')) return null; throw Error('GitHub identity/target read failed'); }
   }
-  const user = await api('user'); assert(user.login === c.github.owner && user.id === c.github.ownerId, 'Corporate GitHub identity mismatch');
+  const user = await api('user'); assert(typeof user?.login === 'string' && Number.isSafeInteger(user.id), 'GitHub identity not confirmed');
   assert.equal(await git('status', '--porcelain'), '', 'Commit reviewed source before pushing');
   assert.equal(await git('remote', 'get-url', 'origin'), 'https://github.com/' + name + '.git');
   const commit = await git('rev-parse', 'HEAD'), tree = await git('rev-parse', 'HEAD^{tree}');
   for (const file of (await git('ls-files')).split('\n')) assert(!/(?:^|\/)(?:\.env(?:\.|$)|node_modules|\.runtime)|\.(?:zip|pem|key)$/.test(file) || file === '.env.example', 'Credential/private file cannot be versioned');
   let repo = await api('repos/' + name);
   if (repo) assert(repo.full_name === name && repo.owner.id === c.github.ownerId && repo.private && repo.permissions?.push && !repo.archived, 'Repository target mismatch');
+  else assert(user.login === c.github.owner && user.id === c.github.ownerId, 'Only the corporate owner can bootstrap the absent repository');
   const branch = repo ? await api('repos/' + name + '/git/ref/heads/main') : null;
   if (branch && branch.object.sha !== commit) {
     await git('merge-base', '--is-ancestor', branch.object.sha, commit);
   }
-  const plan = { owner: user.login, ownerId: user.id, repository: name, private: true, repositoryId: repo?.id || null, createRepository: !repo, commit, tree, branch: 'main', previousCommit: branch?.object.sha || null, maxWrites: (repo ? 0 : 1) + (branch?.object.sha === commit ? 0 : 1) };
+  const plan = { actor: user.login, actorId: user.id, owner: c.github.owner, ownerId: c.github.ownerId, repository: name, private: true, repositoryId: repo?.id || null, createRepository: !repo, commit, tree, branch: 'main', previousCommit: branch?.object.sha || null, maxWrites: (repo ? 0 : 1) + (branch?.object.sha === commit ? 0 : 1) };
   const planHash = sha(JSON.stringify(plan)); await write('.runtime/repository-preview.json', { mode: 'dry-run', plan, planHash });
   if (!options.apply) { console.log(JSON.stringify({ ok: true, mode: 'dry-run', plan, planHash })); return; }
   assert.equal(options.planHash, planHash, 'Repository preview changed');

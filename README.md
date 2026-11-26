@@ -32,7 +32,7 @@ npm run build
 
 A segunda compilação vincula o artefato ao commit exato. O diretório de trabalho deve estar limpo. O CI do GitHub valida testes e build; um push sozinho não publica no Pages.
 
-Autentique a própria conta no GitHub CLI (`gh auth login`) e configure no ambiente privado `CLOUDFLARE_ACCOUNT_ID` e `CLOUDFLARE_API_TOKEN`. Reutilize uma credencial identificável da João & Maria com os acessos necessários a leitura da conta e edição de Pages. Não copie a chave de outra pessoa, não cole segredos no chat e não grave em Git. O GitHub do projeto deve permanecer privado. A concessão de acessos às pessoas é feita pelo responsável da J&M.
+Autentique a própria conta no GitHub CLI (`gh auth login`) e configure no ambiente privado `CLOUDFLARE_ACCOUNT_ID` e `CLOUDFLARE_API_TOKEN`. Colaboradores usam suas próprias contas com permissão de escrita neste repositório; a verificação exige que o dono do recurso continue sendo `dados-jem`, sem exigir compartilhamento do login corporativo. Somente a criação inicial de um repositório ainda ausente exige o proprietário corporativo. Reutilize uma credencial identificável da João & Maria com os acessos necessários a leitura da conta e edição de Pages. Não copie a chave de outra pessoa, não cole segredos no chat e não grave em Git. O GitHub do projeto deve permanecer privado. A concessão de acessos às pessoas é feita pelo responsável da J&M.
 
 ```sh
 npm run repository
