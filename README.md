@@ -14,11 +14,14 @@ npm run dev
 - `src/content/cassia-kawamura.html` e `src/content/forja-diaria.html`: textos e seções de cada página, sem scripts. O HTML é renderizado pelo layout Astro compartilhado.
 - `src/content/pages.json`: títulos, descrição, imagens, preço cheio, descontos, parcelas, estado de publicação e URL oficial do produto.
 - `public/media/`: imagens. `public/fonts/`: fontes locais.
+- A composição inicial da Forja tem oito livros, sem Miloca e Esopo. `composition.books` em `pages.json` conserva as capas originais e os preços cheios dos oito componentes. O build exige que a lista, a soma e as quatro artes correspondam à mesma composição. Uma ampliação futura precisa atualizar esses dados, a copy e o cadastro da loja.
 - `src/styles/landing.css`: visual compartilhado. `src/scripts/landing.mjs`: carrossel e repasse de UTMs.
 
 As duas páginas começam em `draft`: preços provisórios, CTAs para a oferta, analytics comerciais desativados e `noindex`. Para liberar a venda, conferir o cadastro real na loja, preencher `productUrl`, atualizar os valores, marcar `pricing.verified: true` e só então mudar `status` para `published`. Não inventar preços ou estoque. A regra de descontos herdada do material é40% para o público e60% para assinantes; qualquer revisão comercial deve ser aprovada. Não há troca automática de campanha nem vencimento inventado neste projeto.
 
 Antes de uma publicação comercial, revisar também `public/robots.txt` e `public/_headers`, que preservam a proteção de rascunho em todo o projeto. GTM `GTM-W8HJBC4R` e NEMU `ZCGhdVP3U2` estão no layout e ativam somente nas páginas comerciais. Não duplicar tags.
+
+Para recompor hero, mockup, oferta e compartilhamento da Forja, use `scripts/compositions.mjs`. O executor desenha uma composição nativa com as capas originais, sem gerar ou alterar capas. `npm run assets` prepara a prévia em dry-run, sem alterar os arquivos públicos; `npm run assets -- --apply --plan-hash HASH_DA_PREVIA` grava os quatro arquivos exatos e verifica seus hashes. `npm run assets -- --check` é read-only e confere fontes, composição e saídas. O build também executa essa conferência. Assets anteriores são preservados, e as novas imagens recebem o sufixo da revisão.
 
 ## Publicar pela CLI
 
@@ -53,6 +56,6 @@ Conferir primeiro320/390/412px, depois768/1440px: fontes, imagens, ausência de 
 
 ## Origem
 
-Material fornecido pela J&M em26/11/2026: `entrega-TI_combos-cassia-e-forja_2026-11-26.zip`. O hash e a transformação estão em `config/source-manifest.json`. Copy, artes e seções foram preservadas; CSS e runtime foram compartilhados, fontes/imagens passaram a ser locais e as imagens receberam dimensões intrínsecas. A fonte incremental legada do ZIP não é executada pelo projeto Astro.
+Material fornecido pela J&M em26/11/2026: `entrega-TI_combos-cassia-e-forja_2026-11-26.zip`. O hash e as revisões estão em `config/source-manifest.json`. A versão inicial preservou copy, artes e seções; a revisão autorizada da Forja retirou dois livros indisponíveis, recalculou os valores e recompôs as artes com oito capas. CSS e runtime são compartilhados, fontes/imagens são locais e as imagens têm dimensões intrínsecas. A fonte incremental legada do ZIP não é executada pelo projeto Astro.
 
 Documentação oficial: [Astro](https://docs.astro.build/en/guides/deploy/cloudflare/), [Cloudflare Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/).

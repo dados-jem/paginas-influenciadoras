@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "page": "forja-diaria",
+  "revision": "8-livros-v1",
+  "bookCount": 8,
+  "inputSha256": "4d4103935977ddfe6c0f834429ed88c167e4e875cf2326ccde8df7936846f192",
+  "sources": [
+    {
+      "path": "/media/forja/perfil-original.jpg",
+      "sha256": "766815038529359db08f1aac7b03e79a78c291f60dd5436b4d4faee0c0e7c448"
+    },
+    {
+      "path": "/media/capas/hora-dormir.webp",
+      "sha256": "7d63eb23d87e2fd8dfae9bc06372c311b3a4b5773dda064a6ff270546d79c2dc"
+    },
+    {
+      "path": "/media/capas/lua.webp",
+      "sha256": "0a2a2c46f4c015c048ca19fdb9b6115c1f42e7952633f16fa196fcee327cf7fc"
+    },
+    {
+      "path": "/media/capas/bicho.webp",
+      "sha256": "503ead88e185a14f7ad7c62406505a1f8fca4e51be5a561faf6b52f09b7d7879"
+    },
+    {
+      "path": "/media/capas/roy.webp",
+      "sha256": "3fb7103d285d90c53ff6078698017fd8a3f9cda70191ff92d2af3ea8cac152b6"
+    },
+    {
+      "path": "/media/capas/boca.webp",
+      "sha256": "d7a6476dfc5a24a83a16b8c70a74f9492883704a5949acc9dd30b77dcb2a7490"
+    },
+    {
+      "path": "/media/capas/gregos.webp",
+      "sha256": "cbf03380eca003f5c443375496749d6a0c2be4234eb7bc91a9ad478f988c2e9b"
+    },
+    {
+      "path": "/media/capas/orientais.webp",
+      "sha256": "cc6cadb911d42517a20f7aa08e7c4d7ca5bef2e903d3ce9abfcc77b88ebcb771"
+    },
+    {
+      "path": "/media/capas/gatos.webp",
+      "sha256": "595e6b2ade55908f0047f22067ecd0aa841cf7a47b411aa6686193d2cc971ff2"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/media/forja/hero-8-livros-v1.webp",
+      "width": 1300,
+      "height": 843,
+      "sha256": "10d23a643ca04c540c21b85029b49de50bf5026e709df793f0f64dfdb64d9e1f",
+      "bytes": 131986
+    },
+    {
+      "path": "/media/forja/mockup-8-livros-v1.webp",
+      "width": 1097,
+      "height": 1200,
+      "sha256": "071cf2356e9bec053ee3ef4a60198c3474e7b036c9026e6072085d3fd594204a",
+      "bytes": 157366
+    },
+    {
+      "path": "/media/forja/oferta-8-livros-v1.webp",
+      "width": 889,
+      "height": 1200,
+      "sha256": "34ec731a2c3feb27615c769a8af1fb8af45ec823f759d92f4e2619a57b9b9c41",
+      "bytes": 148632
+    },
+    {
+      "path": "/media/forja/compartilhar-8-livros-v1.jpg",
+      "width": 1200,
+      "height": 630,
+      "sha256": "159acef7f3564eb55dd83d32d441d383e361efd838356f102c7d917c87b2d7f6",
+      "bytes": 209878
+    }
+  ]
+}

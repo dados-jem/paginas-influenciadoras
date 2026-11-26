@@ -17,6 +17,18 @@ for (const page of pages) {
   assert(!html.includes('clube.joaoemariaeditora.com.br'), 'Landing must not depend on Hostinger');
   assert(!/\{\{price\./.test(html), 'Unresolved price');
   assert.equal((html.match(/<main\b/g) || []).length, 1);
+  if (page.composition) {
+    const list = html.match(/<ol class="lista">([\s\S]*?)<\/ol>/)?.[1];
+    assert(list, 'Book list missing');
+    assert.deepEqual([...list.matchAll(/<img[^>]+src="([^"]+)"/g)].map(m => m[1]), page.composition.books.map(b => b.cover), 'Page and artwork must show the same ordered book composition');
+    assert(html.includes(`Conheça os ${page.composition.books.length} títulos`) && html.includes(`${page.composition.books.length} livros da Editora`), 'Book count changed');
+    assert(!/Esopo|Miloca|10 (?:livros|títulos)/i.test(html), 'Excluded books must not remain in the current Forja page');
+    const artwork = await json('config/compositions-manifest.json');
+    assert(artwork.outputs.some(o => o.path === page.heroImage) && artwork.outputs.some(o => o.path === page.socialImage));
+    for (const output of artwork.outputs) {
+      assert.equal(byPath.get(output.path.slice(1))?.sha256, output.sha256, 'Artwork in release changed');
+    }
+  }
   const priceNotice = html.includes('PREÇO PROVISÓRIO');
   if (page.status === 'draft') {
     assert(html.includes('noindex, nofollow') && priceNotice, 'Draft must retain its publication/price state');

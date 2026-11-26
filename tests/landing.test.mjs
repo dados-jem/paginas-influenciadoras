@@ -29,6 +29,13 @@ test('URL attribution preserves offer parameters and uses the established NEMU v
   assert.equal(result.searchParams.get('utm_content'), 'visita||nemu_123');
   assert.equal(result.searchParams.get('fbclid'), 'original');
 });
+test('the initial Forja offer has eight books and cannot keep the former ten-book price', () => {
+  const page = pages.find(p => p.key === 'forja-diaria');
+  assert.equal(page.composition.books.length, 8);
+  assert(!page.composition.books.some(b => ['5805566', '5716921'].includes(b.wbuyId)));
+  assert.deepEqual(priceValues(page), { full: '488,30', retail: '292,98', subscriber: '195,32', retailInstallment: '24,42', subscriberInstallment: '16,28' });
+  assert.throws(() => validatePage({ ...page, pricing: { ...page.pricing, full: 608.10 } }));
+});
 test('deployment is dry-run by default and requires a frozen hash for apply', () => {
   assert.deepEqual(argumentsFor([]), { apply: false, planHash: null });
   assert.throws(() => argumentsFor(['--apply']));

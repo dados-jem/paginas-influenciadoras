@@ -9,18 +9,109 @@
     "socialImage": "/media/cassia/compartilhar.jpg",
     "status": "draft",
     "productUrl": null,
-    "pricing": { "full": 607.10, "retailDiscount": 40, "subscriberDiscount": 60, "installments": 12, "verified": false }
+    "pricing": {
+      "full": 607.1,
+      "retailDiscount": 40,
+      "subscriberDiscount": 60,
+      "installments": 12,
+      "verified": false
+    }
   },
   {
     "key": "forja-diaria",
     "slug": "combo-da-forja-diaria",
     "name": "Forja Diária",
     "title": "Combo da Forja Diária | João & Maria",
-    "description": "Uma seleção especial da Forja Kids, com fábulas, mitos gregos, contos orientais e histórias para dormir que acompanham as crianças em cada fase.",
-    "heroImage": "/media/forja/hero.webp",
-    "socialImage": "/media/forja/compartilhar.jpg",
+    "description": "Uma seleção especial da Forja Kids, com mitos gregos, contos orientais e histórias para dormir que acompanham as crianças em cada fase.",
+    "heroImage": "/media/forja/hero-8-livros-v1.webp",
+    "socialImage": "/media/forja/compartilhar-8-livros-v1.jpg",
     "status": "draft",
     "productUrl": null,
-    "pricing": { "full": 608.10, "retailDiscount": 40, "subscriberDiscount": 60, "installments": 12, "verified": false }
+    "pricing": {
+      "full": 488.3,
+      "retailDiscount": 40,
+      "subscriberDiscount": 60,
+      "installments": 12,
+      "verified": false
+    },
+    "composition": {
+      "revision": "8-livros-v1",
+      "source": "Decisão de Pétrick em 26/11/2026: versão inicial sem Miloca e Esopo; ampliação futura ainda sem composição definida.",
+      "profile": "/media/forja/perfil-original.jpg",
+      "books": [
+        {
+          "key": "hora-dormir",
+          "wbuyId": "5896338",
+          "title": "Hora de dormir",
+          "cover": "/media/capas/hora-dormir.webp",
+          "width": 260,
+          "height": 229,
+          "fullCents": 5990
+        },
+        {
+          "key": "lua",
+          "wbuyId": "5805944",
+          "title": "Noite de Lua",
+          "cover": "/media/capas/lua.webp",
+          "width": 241,
+          "height": 320,
+          "fullCents": 5990
+        },
+        {
+          "key": "bicho",
+          "wbuyId": "5716930",
+          "title": "Histórias de bicho e gente",
+          "cover": "/media/capas/bicho.webp",
+          "width": 241,
+          "height": 320,
+          "fullCents": 5990
+        },
+        {
+          "key": "roy",
+          "wbuyId": "5631808",
+          "title": "O rato Roy",
+          "cover": "/media/capas/roy.webp",
+          "width": 241,
+          "height": 320,
+          "fullCents": 5990
+        },
+        {
+          "key": "boca",
+          "wbuyId": "5896494",
+          "title": "As extraordinárias aventuras de Boca e Grenuile",
+          "cover": "/media/capas/boca.webp",
+          "width": 241,
+          "height": 320,
+          "fullCents": 5990
+        },
+        {
+          "key": "gregos",
+          "wbuyId": "5691691",
+          "title": "Histórias dos heróis gregos",
+          "cover": "/media/capas/gregos.webp",
+          "width": 213,
+          "height": 320,
+          "fullCents": 8900
+        },
+        {
+          "key": "orientais",
+          "wbuyId": "3414015",
+          "title": "Contos orientais",
+          "cover": "/media/capas/orientais.webp",
+          "width": 213,
+          "height": 320,
+          "fullCents": 4990
+        },
+        {
+          "key": "gatos",
+          "wbuyId": "3529744",
+          "title": "O menino que desenhava gatos e outros contos fantásticos japoneses",
+          "cover": "/media/capas/gatos.webp",
+          "width": 213,
+          "height": 320,
+          "fullCents": 4990
+        }
+      ]
+    }
   }
 ]

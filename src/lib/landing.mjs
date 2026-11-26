@@ -11,6 +11,11 @@ export function validatePage(page) {
   const p = page.pricing;
   if (!Number.isFinite(p.full) || p.full <= 0 || !Number.isInteger(p.installments) || p.installments < 1) throw Error('Invalid pricing');
   for (const k of ['retailDiscount', 'subscriberDiscount']) if (!Number.isFinite(p[k]) || p[k] < 0 || p[k] >= 100) throw Error('Invalid discount');
+  if (page.composition) {
+    const books = page.composition.books;
+    if (!Array.isArray(books) || books.length < 1 || new Set(books.map(b => b.wbuyId)).size !== books.length) throw Error('Invalid book composition');
+    if (books.some(b => !Number.isInteger(b.fullCents) || b.fullCents <= 0) || books.reduce((n, b) => n + b.fullCents, 0) !== Math.round(p.full * 100)) throw Error('Full price must match the current book composition');
+  }
   if (page.productUrl) {
     const u = new URL(page.productUrl);
     if (u.protocol !== 'https:' || u.hostname !== 'www.joaoemariaeditora.com.br' || u.username || u.password || u.hash) throw Error('Product URL must belong to the J&M store');

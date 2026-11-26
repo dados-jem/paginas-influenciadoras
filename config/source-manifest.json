@@ -33,5 +33,16 @@
   "assetBytes": 2556917,
   "stylesShared": true,
   "secretsCopied": false,
-  "sourceScriptsExecuted": false
+  "sourceScriptsExecuted": false,
+  "revisions": [
+    {
+      "date": "2026-11-26",
+      "page": "forja-diaria",
+      "decision": "Versão inicial com oito livros. Retirar Miloca e Esopo sem substitutos; ampliação futura sem definição.",
+      "previousBodySha256": "4ccc298a6f4c200584fb7b5fb4467c0f882c26166f0f53a3ea066941a4768d88",
+      "bodySha256": "e26c924eca821487192069946a4ef51b30d0890ee48ec2a4b13d22e790506c18",
+      "fullCents": 48830,
+      "artwork": "Composição nativa das oito capas originais, sem modificar as capas. Os arquivos da versão original permanecem preservados."
+    }
+  ]
 }
