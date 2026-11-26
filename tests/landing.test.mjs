@@ -8,8 +8,8 @@ import { publicArtifactPath } from '../scripts/delivery.mjs';
 const pages = JSON.parse(fs.readFileSync(new URL('../src/content/pages.json', import.meta.url)));
 test('a draft cannot become a sale without a real product and approved pricing', () => {
   for (const p of pages) {
-    assert.throws(() => validatePage({ ...p, status: 'published' }));
-    assert.throws(() => validatePage({ ...p, status: 'published', productUrl: 'https://www.joaoemariaeditora.com.br/combo/' }));
+    assert.throws(() => validatePage({ ...p, status: 'published', productUrl: null }));
+    assert.throws(() => validatePage({ ...p, status: 'published', productUrl: 'https://www.joaoemariaeditora.com.br/combo/', pricing: { ...p.pricing, verified: false } }));
     assert.throws(() => validatePage({ ...p, productUrl: 'https://unrelated.example/product' }));
   }
 });

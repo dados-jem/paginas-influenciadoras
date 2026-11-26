@@ -7,14 +7,20 @@
     "description": "Uma seleção especial feita pela Cássia, com poesias, histórias de santos e contos japoneses para cultivar a imaginação, a linguagem e as virtudes desde cedo.",
     "heroImage": "/media/cassia/hero.webp",
     "socialImage": "/media/cassia/compartilhar.jpg",
-    "status": "draft",
-    "productUrl": null,
+    "status": "published",
+    "productUrl": "https://www.joaoemariaeditora.com.br/combo-da-cassia-kawamura/",
     "pricing": {
       "full": 607.1,
       "retailDiscount": 40,
       "subscriberDiscount": 60,
       "installments": 12,
-      "verified": false
+      "verified": true
+    },
+    "indexable": false,
+    "commerce": {
+      "wbuyId": "5981816",
+      "sku": "5981816.187092.0",
+      "baseKitId": "110270732"
     }
   },
   {
@@ -25,14 +31,14 @@
     "description": "Uma seleção especial da Forja Kids, com mitos gregos, contos orientais e histórias para dormir que acompanham as crianças em cada fase.",
     "heroImage": "/media/forja/hero-8-livros-v1.webp",
     "socialImage": "/media/forja/compartilhar-8-livros-v1.jpg",
-    "status": "draft",
-    "productUrl": null,
+    "status": "published",
+    "productUrl": "https://www.joaoemariaeditora.com.br/combo-da-forja-diaria/",
     "pricing": {
       "full": 488.3,
       "retailDiscount": 40,
       "subscriberDiscount": 60,
       "installments": 12,
-      "verified": false
+      "verified": true
     },
     "composition": {
       "revision": "8-livros-v1",
@@ -112,6 +118,12 @@
           "fullCents": 4990
         }
       ]
+    },
+    "indexable": false,
+    "commerce": {
+      "wbuyId": "5981819",
+      "sku": "5981819.187092.0",
+      "baseKitId": "110270733"
     }
   }
 ]

@@ -36,6 +36,8 @@ for (const page of pages) {
     assert.equal((html.match(/href="#oferta"/g) || []).length, 5, 'Draft CTA changed');
   } else {
     assert(!priceNotice && html.includes('data-produto-loja'));
+    assert.equal((html.match(/data-produto-loja/g) || []).length, 5, 'Every commercial CTA must use the verified product');
+    assert.equal((html.match(/href="#oferta"/g) || []).length, 0, 'Commercial CTA still points to the draft offer');
     assert.equal((html.match(/googletagmanager.com\/gtm.js/g) || []).length, 1);
     assert.equal((html.match(/trackings.nemu.com.br/g) || []).length, 1);
   }

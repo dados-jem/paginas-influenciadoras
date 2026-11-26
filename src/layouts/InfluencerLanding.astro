@@ -6,6 +6,7 @@ import runtimeUrl from '../scripts/landing.mjs?url&no-inline';
 const { page, content } = Astro.props;
 const canonical = new URL('/' + page.slug + '/', site.origin).href;
 const commercial = page.status === 'published';
+const indexable = commercial && page.indexable === true;
 const body = renderLanding(content, page);
 ---
 <!doctype html>
@@ -15,7 +16,7 @@ const body = renderLanding(content, page);
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{page.title}</title>
     <meta name="description" content={page.description} />
-    <meta name="robots" content={commercial ? 'index, follow' : 'noindex, nofollow'} />
+    <meta name="robots" content={indexable ? 'index, follow' : 'noindex, nofollow'} />
     <meta name="jm-page-state" content={page.status} />
     <meta name="jm-tracking" content={commercial ? 'gtm-nemu' : 'disabled-draft'} />
     <link rel="canonical" href={canonical} />
