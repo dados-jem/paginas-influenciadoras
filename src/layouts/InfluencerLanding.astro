@@ -1,0 +1,37 @@
+---
+import site from '../../config/site.json';
+import '../styles/landing.css';
+import { renderLanding } from '../lib/landing.mjs';
+import runtimeUrl from '../scripts/landing.mjs?url&no-inline';
+const { page, content } = Astro.props;
+const canonical = new URL('/' + page.slug + '/', site.origin).href;
+const commercial = page.status === 'published';
+const body = renderLanding(content, page);
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{page.title}</title>
+    <meta name="description" content={page.description} />
+    <meta name="robots" content={commercial ? 'index, follow' : 'noindex, nofollow'} />
+    <meta name="jm-page-state" content={page.status} />
+    <meta name="jm-tracking" content={commercial ? 'gtm-nemu' : 'disabled-draft'} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/media/marca/logo-jm.png" type="image/png" />
+    <link rel="preload" as="image" href={page.heroImage} fetchpriority="high" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={page.title} />
+    <meta property="og:description" content={page.description} />
+    <meta property="og:image" content={new URL(page.socialImage, site.origin).href} />
+    {commercial && <script is:inline define:vars={{gtmId: site.tracking.gtm}}>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',gtmId);</script>}
+    {commercial && <script is:inline async crossorigin="anonymous" src={'https://trackings.nemu.com.br/trackings/' + site.tracking.nemu + '/script.js'} data-tracking-id={site.tracking.nemu}></script>}
+  </head>
+  <body>
+    {commercial && <noscript><iframe src={'https://www.googletagmanager.com/ns.html?id=' + site.tracking.gtm} height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>}
+    <Fragment set:html={body} />
+    <script is:inline type="module" src={runtimeUrl}></script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+---
+import pages from '../content/pages.json';
+---
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><meta name="robots" content="noindex,nofollow" /><title>Combos das influenciadoras | João & Maria</title><link rel="icon" href="/media/marca/logo-jm.png" /></head>
+<body>
+  <main><img class="logo" src="/media/marca/logo-jm.png" alt="Editora João & Maria" width="350" height="146" /><p class="eyebrow">LEITURAS PARA COMPARTILHAR</p><h1>Seleções especiais,<br />histórias para a vida toda.</h1><div class="pages">{pages.map(page => <a href={'/' + page.slug + '/'}><img src={page.heroImage} alt={'Seleção de livros de ' + page.name} width="1058" height="834" /><h2>Combo da {page.name}</h2><span>Conheça a seleção</span></a>)}</div></main>
+</body>
+</html>
+<style>
+@font-face{font-family:Satoshi;src:url('/fonts/Satoshi-Variable.woff2') format('woff2');font-display:swap}*{box-sizing:border-box}body{margin:0;background:#fffdf7;color:#17303f;font-family:Satoshi,system-ui,sans-serif}main{max-width:1080px;margin:auto;padding:40px 22px 64px}.logo{width:145px;height:auto}.eyebrow{font-size:.8rem;font-weight:800;letter-spacing:.12em;color:#dc6357;margin:40px 0 12px}h1{font-family:Georgia,serif;font-size:clamp(2.1rem,5vw,3.4rem);font-weight:500;line-height:1.1;margin:0 0 38px}.pages{display:grid;gap:24px}.pages a{color:inherit;text-decoration:none;border:1px solid #e6dfd4;border-radius:24px;padding:20px;background:#fff;transition:transform .2s}.pages a:focus-visible{outline:3px solid #17303f;outline-offset:5px}.pages a:hover{transform:translateY(-3px)}.pages img{width:100%;height:auto;display:block}h2{font-size:1.4rem;margin:14px 0}span{display:block;font-weight:750;color:#c75549;padding:8px 0}@media(min-width:680px){.pages{grid-template-columns:1fr 1fr}main{padding-top:50px}}@media(prefers-reduced-motion:reduce){.pages a{transition:none}}
+</style>

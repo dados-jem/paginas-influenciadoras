@@ -1,0 +1,37 @@
+{
+  "sourceArchive": "entrega-TI_combos-cassia-e-forja_2026-11-26.zip",
+  "archiveSha256": "b2b047394345a5b96bf59149579a795fae76983f308a33f9f86028a3bf610f76",
+  "pages": [
+    {
+      "key": "cassia-kawamura",
+      "sourceSha256": "c7166455c3f88c45b955062664860ed68ae3def5e7c2cb0f4ee5d4a83e33788e",
+      "priceTokenOccurrences": {
+        "full": 1,
+        "retail": 1,
+        "subscriber": 1,
+        "retailInstallment": 1,
+        "subscriberInstallment": 0
+      },
+      "bodySha256": "d0d17f9b389bef39abab7f003f1ce287b6de5a20f4863b2b40024fef6b79183d",
+      "sourceTextCharacters": 6997
+    },
+    {
+      "key": "forja-diaria",
+      "sourceSha256": "4857458ff6f34a1531155df062d3ffc92c7cb7b14d736babcfab50251a07822a",
+      "priceTokenOccurrences": {
+        "full": 1,
+        "retail": 1,
+        "subscriber": 1,
+        "retailInstallment": 1,
+        "subscriberInstallment": 0
+      },
+      "bodySha256": "1f2e41488cbf676a8df6acbef3d0218854d4ef2e75882c719ebbdf0f65b11419",
+      "sourceTextCharacters": 5982
+    }
+  ],
+  "assets": 43,
+  "assetBytes": 2556917,
+  "stylesShared": true,
+  "secretsCopied": false,
+  "sourceScriptsExecuted": false
+}

@@ -1,0 +1,18 @@
+{
+  "origin": "https://paginas-influenciadoras.pages.dev",
+  "github": {
+    "owner": "dados-jem",
+    "ownerId": 327816671,
+    "repository": "paginas-influenciadoras",
+    "visibility": "private",
+    "branch": "main"
+  },
+  "cloudflare": {
+    "accountName": "Editora João e Maria",
+    "accountId": "aa5bc6c8ac9f9bc00b32e8fb8d891d59",
+    "projectName": "paginas-influenciadoras",
+    "productionBranch": "main"
+  },
+  "tracking": { "gtm": "GTM-W8HJBC4R", "nemu": "ZCGhdVP3U2" },
+  "budgets": { "artifactBytes": 6000000, "htmlBytesPerPage": 60000, "runtimeBytes": 20000 }
+}

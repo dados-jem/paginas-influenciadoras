@@ -1,0 +1,26 @@
+[
+  {
+    "key": "cassia-kawamura",
+    "slug": "combo-da-cassia-kawamura",
+    "name": "Cássia Kawamura",
+    "title": "Combo da Cássia Kawamura | João & Maria",
+    "description": "Uma seleção especial feita pela Cássia, com poesias, histórias de santos e contos japoneses para cultivar a imaginação, a linguagem e as virtudes desde cedo.",
+    "heroImage": "/media/cassia/hero.webp",
+    "socialImage": "/media/cassia/compartilhar.jpg",
+    "status": "draft",
+    "productUrl": null,
+    "pricing": { "full": 607.10, "retailDiscount": 40, "subscriberDiscount": 60, "installments": 12, "verified": false }
+  },
+  {
+    "key": "forja-diaria",
+    "slug": "combo-da-forja-diaria",
+    "name": "Forja Diária",
+    "title": "Combo da Forja Diária | João & Maria",
+    "description": "Uma seleção especial da Forja Kids, com fábulas, mitos gregos, contos orientais e histórias para dormir que acompanham as crianças em cada fase.",
+    "heroImage": "/media/forja/hero.webp",
+    "socialImage": "/media/forja/compartilhar.jpg",
+    "status": "draft",
+    "productUrl": null,
+    "pricing": { "full": 608.10, "retailDiscount": 40, "subscriberDiscount": 60, "installments": 12, "verified": false }
+  }
+]
