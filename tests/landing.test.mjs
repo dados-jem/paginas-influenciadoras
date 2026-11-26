@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import { renderLanding, validatePage, priceValues } from '../src/lib/landing.mjs';
 import { attributionHref } from '../src/scripts/landing.mjs';
 import { argumentsFor } from '../scripts/project.mjs';
+import { publicArtifactPath } from '../scripts/delivery.mjs';
 const pages = JSON.parse(fs.readFileSync(new URL('../src/content/pages.json', import.meta.url)));
 test('a draft cannot become a sale without a real product and approved pricing', () => {
   for (const p of pages) {
@@ -34,4 +35,11 @@ test('deployment is dry-run by default and requires a frozen hash for apply', ()
   assert.throws(() => argumentsFor(['--force']));
   assert.throws(() => argumentsFor(['--plan-hash', 'a'.repeat(64)]));
   assert(argumentsFor(['--apply', '--plan-hash', 'a'.repeat(64)]).apply);
+});
+test('Pages control files and normalized HTML are verified through their real public routes',()=>{
+  assert.equal(publicArtifactPath('_headers'),null);
+  assert.equal(publicArtifactPath('combo/index.html'),'/combo/');
+  assert.equal(publicArtifactPath('index.html'),'/');
+  assert.equal(publicArtifactPath('404.html'),'/404');
+  assert.equal(publicArtifactPath('_astro/landing.mjs'),'/_astro/landing.mjs');
 });

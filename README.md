@@ -43,7 +43,9 @@ npm run deploy -- --apply --plan-hash HASH_DA_PREVIA
 
 Cada executor é `dry-run` por padrão, valida a conta e os alvos exatos, congela o hash do plano, limita as mutações e faz releitura. `GITHUB_CLI_BIN` permite apontar para a instalação do `gh` quando ele não está no PATH. Upload com resultado incerto não é reenviado: confira o projeto e os recibos em `.runtime/` primeiro.
 
-O publicador usa Wrangler Direct Upload e confere os bytes de todos os arquivos no deployment imutável e no endereço público. Na atualização, guarda o deployment anterior. Se um deployment confirmado falhar na verificação e tiver se tornado canônico, tenta restaurar somente esse deployment anterior. O primeiro deploy não tem versão anterior para restaurar. Não apaga projetos nem versões.
+O publicador usa Wrangler Direct Upload, relê o deployment pela API oficial e confere os bytes de todos os arquivos públicos no endereço final. Arquivos de controle como `_headers` são conferidos pela política aplicada; páginas `.html` usam as rotas normalizadas do Pages. Também confere o endereço imutável quando o certificado dele já está disponível e informa separadamente qualquer pendência desse endereço. Na atualização, guarda o deployment anterior. Se um deployment confirmado falhar na verificação e tiver se tornado canônico, tenta restaurar somente esse deployment anterior. O primeiro deploy não tem versão anterior para restaurar. Não apaga projetos nem versões.
+
+Se o upload tiver concluído, mas a conferência tiver sido interrompida, `npm run verify:published` relê o mesmo deployment e seus hashes, usando o build e o recibo local de `.runtime/current-deployment.json`. Esse comando é `read-only`: não repete o upload nem cria outra versão.
 
 ## Validação no celular
 

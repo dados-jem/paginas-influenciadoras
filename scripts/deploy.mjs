@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import { root, run, config, sha, write, json, approvedArtifact, argumentsFor } from './project.mjs';
+import {verifyDelivery} from './delivery.mjs';
 
 async function main() {
   const options = argumentsFor(process.argv.slice(2)), c = await config(), artifact = await approvedArtifact();
@@ -65,29 +66,8 @@ async function main() {
     const expectedUrl = new URL(deployment.url);
     assert(expectedUrl.protocol === 'https:' && expectedUrl.hostname.endsWith('.' + c.cloudflare.projectName + '.pages.dev'), 'Deployment URL mismatch');
     await write('.runtime/current-deployment.json', { deploymentId: deployment.id, url: deployment.url, projectName: project.name, sourceCommit: artifact.sourceCommit, artifactSha256: artifact.artifactSha256, previousDeploymentId: prior });
-    const publicChecks = [];
-    for (const base of [deployment.url, c.origin]) {
-      for (let offset = 0; offset < artifact.files.length; offset += 6) {
-        const batch = artifact.files.slice(offset, offset + 6);
-        const results = await Promise.all(batch.map(async f => {
-          let pathname = '/' + f.path;
-          if (pathname.endsWith('/index.html')) pathname = pathname.slice(0, -10);
-          let checked;
-          for (let attempt = 0; attempt < 3; attempt++) {
-            const r = await fetch(new URL(pathname, base), { redirect: 'error', signal: AbortSignal.timeout(20000) });
-            const b = Buffer.from(await r.arrayBuffer());
-            if ((r.ok || f.path === '404.html' && r.status === 404) && sha(b) === f.sha256) { checked = { path: f.path, ok: true }; break; }
-            if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 2000));
-          }
-          assert(checked, 'Published content mismatch at ' + f.path);
-          return checked;
-        }));
-        publicChecks.push(...results);
-      }
-    }
-    const manifest = await (await fetch(new URL('/release-manifest.json', c.origin), { redirect: 'error' })).json();
-    assert.equal(manifest.sourceCommit, artifact.sourceCommit); assert.equal(manifest.artifactSha256, artifact.artifactSha256);
-    const report = { ok: true, mode: 'apply', verifiedAt: new Date().toISOString(), planHash, projectName: project.name, deploymentId: deployment.id, url: c.origin, immutableUrl: deployment.url, sourceCommit: artifact.sourceCommit, artifactSha256: artifact.artifactSha256, previousDeploymentId: prior, filesVerified: publicChecks.length, canonicalVerified: true, rollback: 'not-needed' };
+    const delivery = await verifyDelivery(c.origin, deployment.url, artifact);
+    const report = { ok: true, mode: 'apply', verifiedAt: new Date().toISOString(), planHash, projectName: project.name, deploymentId: deployment.id, url: c.origin, immutableUrl: deployment.url, sourceCommit: artifact.sourceCommit, artifactSha256: artifact.artifactSha256, previousDeploymentId: prior, delivery, canonicalVerified: true, rollback: 'not-needed' };
     await write('.runtime/deploy-verified.json', report);
     await write(intentPath, { state: 'verified', ...report });
     console.log(JSON.stringify(report));
