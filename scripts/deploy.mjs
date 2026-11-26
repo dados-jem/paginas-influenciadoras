@@ -66,8 +66,8 @@ async function main() {
     const expectedUrl = new URL(deployment.url);
     assert(expectedUrl.protocol === 'https:' && expectedUrl.hostname.endsWith('.' + c.cloudflare.projectName + '.pages.dev'), 'Deployment URL mismatch');
     await write('.runtime/current-deployment.json', { deploymentId: deployment.id, url: deployment.url, projectName: project.name, sourceCommit: artifact.sourceCommit, artifactSha256: artifact.artifactSha256, previousDeploymentId: prior });
-    const delivery = await verifyDelivery(c.origin, deployment.url, artifact);
-    const report = { ok: true, mode: 'apply', verifiedAt: new Date().toISOString(), planHash, projectName: project.name, deploymentId: deployment.id, url: c.origin, immutableUrl: deployment.url, sourceCommit: artifact.sourceCommit, artifactSha256: artifact.artifactSha256, previousDeploymentId: prior, delivery, canonicalVerified: true, rollback: 'not-needed' };
+    const delivery = await verifyDelivery(c.deliveryOrigin, deployment.url, artifact);
+    const report = { ok: true, mode: 'apply', verifiedAt: new Date().toISOString(), planHash, projectName: project.name, deploymentId: deployment.id, url: c.deliveryOrigin, immutableUrl: deployment.url, sourceCommit: artifact.sourceCommit, artifactSha256: artifact.artifactSha256, previousDeploymentId: prior, delivery, canonicalVerified: true, rollback: 'not-needed' };
     await write('.runtime/deploy-verified.json', report);
     await write(intentPath, { state: 'verified', ...report });
     console.log(JSON.stringify(report));

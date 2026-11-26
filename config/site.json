@@ -1,5 +1,7 @@
 {
-  "origin": "https://paginas-influenciadoras.pages.dev",
+  "origin": "https://lp.joaoemariaeditora.com.br",
+  "deliveryOrigin": "https://paginas-influenciadoras.pages.dev",
+  "publication": { "project": "jm-lp", "assetPrefix": "/influenciadoras-assets/" },
   "github": {
     "owner": "dados-jem",
     "ownerId": 327816671,

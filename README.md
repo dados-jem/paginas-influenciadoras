@@ -1,6 +1,6 @@
 # Páginas das influenciadoras — João & Maria
 
-Astro estático, código no GitHub corporativo `dados-jem/paginas-influenciadoras` e hospedagem independente no Cloudflare Pages `paginas-influenciadoras`. A hospedagem destas páginas não depende da Hostinger.
+Astro estático e código no GitHub corporativo `dados-jem/paginas-influenciadoras`. As URLs finais são `https://lp.joaoemariaeditora.com.br/combo-da-cassia-kawamura/` e `https://lp.joaoemariaeditora.com.br/combo-da-forja-diaria/`. A publicação acrescenta essas rotas ao projeto Cloudflare Pages compartilhado `jm-lp`, preservando o mapa nativo dos demais arquivos. O projeto `paginas-influenciadoras` continua disponível para previews separados. A hospedagem destas páginas não depende da Hostinger.
 
 ## Editar e conferir
 
@@ -46,9 +46,15 @@ npm run deploy -- --apply --plan-hash HASH_DA_PREVIA
 
 Cada executor é `dry-run` por padrão, valida a conta e os alvos exatos, congela o hash do plano, limita as mutações e faz releitura. `GITHUB_CLI_BIN` permite apontar para a instalação do `gh` quando ele não está no PATH. Upload com resultado incerto não é reenviado: confira o projeto e os recibos em `.runtime/` primeiro.
 
-O publicador usa Wrangler Direct Upload, relê o deployment pela API oficial e confere os bytes de todos os arquivos públicos no endereço final. Arquivos de controle como `_headers` são conferidos pela política aplicada; páginas `.html` usam as rotas normalizadas do Pages. Também confere o endereço imutável quando o certificado dele já está disponível e informa separadamente qualquer pendência desse endereço. Na atualização, guarda o deployment anterior. Se um deployment confirmado falhar na verificação e tiver se tornado canônico, tenta restaurar somente esse deployment anterior. O primeiro deploy não tem versão anterior para restaurar. Não apaga projetos nem versões.
+O publicador de produção é `scripts/lp.mjs`, com preparação em `scripts/lp-artifact.mjs`. Os assets usam `/influenciadoras-assets/<commit>/`; home, robots, CSS e scripts das outras páginas não são substituídos. A API oficial entrega o mapa nativo completo do deployment atual; o executor preserva todos os arquivos fora do próprio escopo e acrescenta somente os seus arquivos. Cabeçalhos e redirects existentes precisam de recibo verificado do deployment exato (`JM_LP_BASELINE_FILE`), com hashes, textos `headers`/`redirects` e checks conhecidos. Não use um build antigo do site inteiro como base.
 
-Se o upload tiver concluído, mas a conferência tiver sido interrompida, `npm run verify:published` relê o mesmo deployment e seus hashes, usando o build e o recibo local de `.runtime/current-deployment.json`. Esse comando é `read-only`: não repete o upload nem cria outra versão.
+`npm run deploy` faz dry-run; apply exige o hash. Uma trava (`JM_LP_PUBLICATION_LOCK_FILE`, ou a trava local por padrão) protege a operação e o projeto é relido depois do upload dos assets, imediatamente antes da única criação de deployment. Alteração concorrente interrompe o apply e exige uma nova mesclagem. Depois da criação, relê o mapa completo e os bytes publicados, confere páginas anteriores e redirects, e conserva o ID anterior. Uma resposta incerta exige `npm run verify:lp`, read-only, sem repetir upload ou criação. Para eventual rollback, só restaure o deployment anterior se a versão canônica ainda for exatamente esta publicação; preserve uma publicação concorrente posterior.
+
+No workspace de operações, `npm run influenciadoras:publish:lp` resolve o recibo atual dos controles, reutiliza a credencial Pages do cliente em memória e usa a trava compartilhada `.agents/runtime/jm-lp-shared-publication.lock`. Apply usa `-- --apply --plan-hash HASH`; releitura usa `-- --verify`. Uma versão desconhecida dos controles interrompe a execução. Outros publicadores do `jm-lp` também devem preservar o mapa canônico e respeitar a trava; um full upload sem mesclagem pode apagar rotas concorrentes.
+
+Para um preview independente, `npm run deploy:preview` usa `scripts/deploy.mjs` e o projeto próprio `paginas-influenciadoras`, com dry-run/apply por hash. Esse upload não publica as rotas finais no `lp`.
+
+Para o preview independente, `npm run verify:published` relê o deployment e seus hashes usando `.runtime/current-deployment.json`. Para as URLs finais, use `npm run verify:lp` e o recibo `.runtime/lp-current.json`. Ambos são read-only e não criam outra versão.
 
 ## Validação no celular
 

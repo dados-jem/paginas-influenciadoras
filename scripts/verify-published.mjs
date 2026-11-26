@@ -12,8 +12,8 @@ async function read(route){const r=await fetch(apiRoot+route,{headers:{authoriza
 assert.equal((await read('')).name,c.cloudflare.accountName);
 const project=await read('/pages/projects/'+c.cloudflare.projectName),deployment=project.canonical_deployment;
 assert.equal(deployment.id,current.deploymentId);assert.equal(deployment.deployment_trigger.metadata.commit_hash,artifact.sourceCommit);assert.equal(deployment.latest_stage.status,'success');
-const delivery=await verifyDelivery(c.origin,current.url,artifact);
-const report={ok:true,mode:'read-only',verifiedAt:new Date().toISOString(),projectName:project.name,deploymentId:deployment.id,url:c.origin,immutableUrl:current.url,sourceCommit:artifact.sourceCommit,artifactSha256:artifact.artifactSha256,delivery,reconciledWithoutUpload:true,platformWrites:0};
+const delivery=await verifyDelivery(c.deliveryOrigin,current.url,artifact);
+const report={ok:true,mode:'read-only',verifiedAt:new Date().toISOString(),projectName:project.name,deploymentId:deployment.id,url:c.deliveryOrigin,immutableUrl:current.url,sourceCommit:artifact.sourceCommit,artifactSha256:artifact.artifactSha256,delivery,reconciledWithoutUpload:true,platformWrites:0};
 await write('.runtime/deploy-verified.json',report);
 const intentDir=path.join(root,'.runtime/deploy-intents');for(const f of await fs.readdir(intentDir).catch(()=>[])){if(!f.endsWith('.json'))continue;const key='.runtime/deploy-intents/'+f,p=await json(key);if(p.deploymentId===deployment.id&&p.plan?.sourceCommit===artifact.sourceCommit)await write(key,{...p,state:'verified',reconciledAt:report.verifiedAt,delivery});}
 console.log(JSON.stringify(report));

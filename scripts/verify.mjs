@@ -13,7 +13,7 @@ for (const page of pages) {
   assert(byPath.has(entry), 'Landing missing from build');
   const html = await fs.readFile(path.join(root, 'dist', entry), 'utf8');
   assert(byPath.get(entry).bytes <= c.budgets.htmlBytesPerPage, 'Page HTML exceeds its budget');
-  assert(html.includes(page.title.replaceAll('&', '&amp;')) && html.includes('https://paginas-influenciadoras.pages.dev/' + page.slug + '/'), 'Title/canonical mismatch');
+  assert(html.includes(page.title.replaceAll('&', '&amp;')) && html.includes(c.origin + '/' + page.slug + '/'), 'Title/canonical mismatch');
   assert(!html.includes('clube.joaoemariaeditora.com.br'), 'Landing must not depend on Hostinger');
   assert(!/\{\{price\./.test(html), 'Unresolved price');
   assert.equal((html.match(/<main\b/g) || []).length, 1);

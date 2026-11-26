@@ -13,7 +13,8 @@ export async function config() {
   const c = await json('config/site.json');
   assert(c.github.owner === 'dados-jem' && c.github.ownerId === 327816671 && c.github.repository === 'paginas-influenciadoras' && c.github.visibility === 'private' && c.github.branch === 'main', 'Exact corporate GitHub target required');
   assert(c.cloudflare.accountName === 'Editora João e Maria' && c.cloudflare.accountId === 'aa5bc6c8ac9f9bc00b32e8fb8d891d59' && c.cloudflare.projectName === 'paginas-influenciadoras' && c.cloudflare.productionBranch === 'main', 'Exact Pages target required');
-  assert(c.origin === 'https://paginas-influenciadoras.pages.dev');
+  assert(c.origin === 'https://lp.joaoemariaeditora.com.br' && c.deliveryOrigin === 'https://paginas-influenciadoras.pages.dev');
+  assert(c.publication.project === 'jm-lp' && c.publication.assetPrefix === '/influenciadoras-assets/');
   return c;
 }
 export async function files(directory, prefix = '') {

@@ -14,8 +14,10 @@
     "verify:published": "node scripts/verify-published.mjs",
     "test": "node --test tests/*.test.mjs",
     "assets": "node scripts/compositions.mjs",
-    "deploy": "node scripts/deploy.mjs",
-    "repository": "node scripts/repository.mjs"
+    "deploy": "node scripts/lp.mjs",
+    "repository": "node scripts/repository.mjs",
+    "deploy:preview": "node scripts/deploy.mjs",
+    "verify:lp": "node scripts/lp.mjs --verify"
   },
   "dependencies": {
     "astro": "7.3.2"
