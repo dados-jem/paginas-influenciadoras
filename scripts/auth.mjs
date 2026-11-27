@@ -8,7 +8,7 @@ const wrangler=path.join(root,'node_modules/wrangler/bin/wrangler.js');
 export function parseWranglerCredential(raw){let value;try{value=JSON.parse(raw);}catch{throw Error('Não foi possível ler a autenticação do Cloudflare. Execute ./jm login.');}assert(['api_token','oauth'].includes(value.type)&&typeof value.token==='string'&&value.token.length>=20,'Use login pessoal ou token Pages; chave global não é aceita.');return value.token;}
 export async function cloudflareEnvironment(){
  const c=await config(),env=runtimeEnv();assert(!env.CLOUDFLARE_ACCOUNT_ID||env.CLOUDFLARE_ACCOUNT_ID===c.cloudflare.accountId,'Conta Cloudflare divergente');env.CLOUDFLARE_ACCOUNT_ID=c.cloudflare.accountId;
- if(!env.CLOUDFLARE_API_TOKEN)env.CLOUDFLARE_API_TOKEN=parseWranglerCredential(await quiet(process.execPath,[wrangler,'auth','token','--json','--profile',authProfile],{env:{...env,WRANGLER_LOG_SANITIZE:'true'}}));
+ if(!env.CLOUDFLARE_API_TOKEN){let raw;try{raw=await quiet(process.execPath,[wrangler,'auth','token','--json','--profile',authProfile],{env});}catch{throw Error('Cloudflare não está autenticado neste projeto. Execute ./jm login.');}env.CLOUDFLARE_API_TOKEN=parseWranglerCredential(raw);}
  return env;
 }
 export async function verifyAccess({env=process.env,request=fetch,github=undefined}={}){

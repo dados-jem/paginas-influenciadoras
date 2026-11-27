@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {root,isExpectedRepositoryOrigin} from '../scripts/project.mjs';
-import {sourceFingerprint,dependenciesValid,snapshotMatches} from '../scripts/bootstrap.mjs';
+import {sourceFingerprint,dependenciesValid,snapshotMatches,needsGitInitialization} from '../scripts/bootstrap.mjs';
 import {parseWranglerCredential,verifyAccess,oauthScopes} from '../scripts/auth.mjs';
 import {quiet,runtimeEnv} from '../scripts/local-runtime.mjs';
 async function fixture(t){const runtime=path.join(root,'.runtime');await fs.mkdir(runtime,{recursive:true});const directory=await fs.mkdtemp(path.join(runtime,'test-bootstrap-'));t.after(()=>fs.rm(directory,{recursive:true,force:true}));return directory;}
@@ -17,6 +17,7 @@ test('the setup detects a missing or mismatched pinned dependency instead of rep
  const dir=await fixture(t);await fs.writeFile(path.join(dir,'package.json'),JSON.stringify({dependencies:{astro:'7.3.2'}}));assert.equal(await dependenciesValid(dir),false);await fs.mkdir(path.join(dir,'node_modules/astro'),{recursive:true});await fs.writeFile(path.join(dir,'node_modules/astro/package.json'),'{"version":"7.3.1"}');assert.equal(await dependenciesValid(dir),false);await fs.writeFile(path.join(dir,'node_modules/astro/package.json'),'{"version":"7.3.2"}');assert.equal(await dependenciesValid(dir),true);
 });
 test('ZIP adoption refuses a different GitHub snapshot without overwriting source',()=>{assert.doesNotThrow(()=>snapshotMatches(['a:1'],['a:1']));assert.throws(()=>snapshotMatches(['a:1'],['a:2']),/diverge/);assert.throws(()=>snapshotMatches(['a:1'],[]),/incompleto/);});
+test('a partially initialized ZIP cannot be mistaken for a ready Git repository on retry',()=>{assert(needsGitInitialization({ownGit:false}));assert.equal(needsGitInitialization({ownGit:true,hasHead:true}),false);assert.throws(()=>needsGitInitialization({ownGit:true,hasHead:false}),/incompleto/);assert(needsGitInitialization({ownGit:true,hasHead:false,adoption:{origin:'https://github.com/dados-jem/paginas-influenciadoras.git',state:'initializing'}}));assert.throws(()=>needsGitInitialization({ownGit:true,hasHead:false,adoption:{origin:'https://example.invalid/other',state:'initializing'}}));});
 test('OAuth and API token credentials remain in memory and global API keys are rejected',()=>{
  const token='synthetic-credential-value-for-local-tests';assert.equal(parseWranglerCredential(JSON.stringify({type:'oauth',token})),token);assert.equal(parseWranglerCredential(JSON.stringify({type:'api_token',token})),token);assert.throws(()=>parseWranglerCredential(JSON.stringify({type:'api_key',key:token,email:'fixture@example.invalid'})));assert.throws(()=>parseWranglerCredential('<html>'+token));assert(!oauthScopes.some(s=>/workers:|zone:|dns:|r2:|d1:/.test(s)));assert.equal(runtimeEnv().WRANGLER_WRITE_LOGS,'false');
 });
