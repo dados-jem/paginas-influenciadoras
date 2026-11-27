@@ -3,7 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import { config, json, sha, write, root, argumentsFor } from './project.mjs';
 import { prepareLpArtifact, nativeHash, manifestHash, mergeLpManifest,assertNoRedirectCollisions } from './lp-artifact.mjs';
-import {receiptsFile,selectReceipt,publicReceipt} from './publication-receipts.mjs';
+import {receiptsFile,selectReceipt,publicReceipt,localArtifactFor} from './publication-receipts.mjs';
 
 const canonicalPath = file => file.endsWith('/index.html') ? file.slice(0, -10) : file;
 const exists = async p => Boolean(await fs.stat(p).catch(() => null));
@@ -96,9 +96,9 @@ try {
     if(prior?.deploymentId===remote.id&&prior.fullManifestHash===remoteHash)receipt=publicReceipt(prior);
     else if(currentIntent?.deploymentId===remote.id&&currentIntent.plan.fullManifestHash===remoteHash){const staged=await json('.runtime/lp-artifact.json');assert.equal(staged.sourceCommit,currentIntent.plan.sourceCommit);assert.equal(manifestHash(Object.fromEntries(staged.files.map(f=>[f.path,f.nativeHash]))),currentIntent.plan.addedManifestHash);artifact=staged;receipt=publicReceipt({...currentIntent,fullManifestHash:remoteHash,artifact:staged});}
     else receipt=selectReceipt(await json(receiptsFile),{id:remote.id,manifestHash:remoteHash});
-    if(!artifact&&prior?.artifact?.prefix&&JSON.stringify(prior.artifact.files)===JSON.stringify(receipt.ownedFiles))artifact=prior.artifact;
-    if(!artifact)artifact={pages:receipt.ownedFiles.filter(f=>f.path.endsWith('/index.html')).map(f=>f.path.slice(0,-10)),files:receipt.ownedFiles,sourceCommit:receipt.sourceCommit,sourceArtifactSha256:receipt.artifactSha256};
-    const current={...receipt,headers:receipt.headers,redirects:receipt.redirects,preserved:{},canaries:receipt.canaries,redirectChecks:receipt.redirectChecks};
+    if(!artifact)artifact=localArtifactFor(receipt,[prior?.artifact,await json('.runtime/lp-artifact.json').catch(e=>{if(e.code!=='ENOENT')throw e;return null;})]);
+    const preserved=prior?.deploymentId===remote.id&&Object.keys(prior.preserved||{}).length?prior.preserved:currentIntent?.deploymentId===remote.id&&currentIntent.plan.fullManifestHash===remoteHash?currentIntent.preserved||{}:{};
+    const current={...receipt,headers:receipt.headers,redirects:receipt.redirects,preserved,canaries:receipt.canaries,redirectChecks:receipt.redirectChecks};
     await verify(current,{fullManifestHash:receipt.manifestHash,previousDeploymentId:receipt.previousDeploymentId});
   } else {
     const lockFile = process.env.JM_LP_PUBLICATION_LOCK_FILE || path.join(root, '.runtime/lp-publication.lock');

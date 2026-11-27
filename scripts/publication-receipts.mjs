@@ -17,6 +17,14 @@ export function publicReceipt(r){
  return {version:1,project:'jm-lp',deploymentId,manifestHash,sourceCommit:r.sourceCommit||null,artifactSha256:r.artifactSha256||null,previousDeploymentId:r.previousDeploymentId||null,headers:r.headers,headersSha256:sha(r.headers),redirects:r.redirects,redirectsSha256:sha(r.redirects),redirectChecks:r.redirectChecks||[],canaries:r.canaries||[],ownedFiles};
 }
 export function selectReceipt(registry,snapshot){const receipt=registry.receipts.find(r=>r.deploymentId===snapshot.id&&r.manifestHash===snapshot.manifestHash);assert(receipt,'The current shared deployment needs its verified public control receipt; import it with npm run publication:record');return publicReceipt(receipt);}
+export function localArtifactFor(receipt,candidates=[]){
+ for(const candidate of candidates){
+  if(candidate?.origin!=='https://lp.joaoemariaeditora.com.br'||!/^\/influenciadoras-assets\/[a-f0-9]{16}\/$/.test(candidate.prefix||'')||candidate.files?.length!==receipt.ownedFiles.length)continue;
+  const files=new Map(candidate.files.map(f=>[f.path,f]));
+  if(receipt.ownedFiles.every(f=>{const known=files.get(f.path);return known&&['nativeHash','sha256','bytes'].every(k=>known[k]===f[k]);}))return candidate;
+ }
+ return {pages:receipt.ownedFiles.filter(f=>f.path.endsWith('/index.html')).map(f=>f.path.slice(0,-10)),files:receipt.ownedFiles,sourceCommit:receipt.sourceCommit,sourceArtifactSha256:receipt.artifactSha256};
+}
 async function main(){
  const {values:a}=parseArgs({options:{file:{type:'string'},apply:{type:'boolean'},'plan-hash':{type:'string'}}});
  const source=path.resolve(a.file||path.join(root,'.runtime/lp-verified.json')),receipt=publicReceipt(JSON.parse(await fs.readFile(source,'utf8'))),before=await json(receiptsFile).catch(e=>{if(e.code!=='ENOENT')throw e;return{version:1,receipts:[]}});
