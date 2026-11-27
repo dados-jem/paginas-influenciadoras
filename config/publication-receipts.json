@@ -899,6 +899,470 @@
           "bytes": 54028
         }
       ]
+    },
+    {
+      "version": 1,
+      "project": "jm-lp",
+      "deploymentId": "bc2187d7-4492-4dd0-9471-558e82f61b76",
+      "manifestHash": "e6450b8afd64d60fba3a0fcd35c4ea60e6ae65783a61f994552eb09876b16eaa",
+      "sourceCommit": "b87d586a8af4110eeb354cf1dbf4934e5518997e",
+      "artifactSha256": "1d667dfc0ad8ccdd39c0c99822f02db555916b7ff8894f8653a65e35468ba2f3",
+      "previousDeploymentId": "9b8b76bd-f619-4b02-bd0a-4f935ef8df7d",
+      "headers": "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), geolocation=(), microphone=(), payment=()\n  X-Frame-Options: DENY\n\n/_astro/*\n  Cache-Control: public, max-age=31536000, immutable\n\n/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n\n/brand/*\n  Cache-Control: public, max-age=86400\n\n# BEGIN JM GUIDE ROUTE\n/guia-de-leitura/*\n  ! X-Frame-Options\n  Content-Security-Policy: default-src 'self'; img-src 'self'; font-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self' https://jm-guia-leitura-stock.joao-maria-editora.workers.dev; base-uri 'none'; object-src 'none'; frame-ancestors https://catalogo.joaoemariaeditora.com.br https://www.joaoemariaeditora.com.br https://joaoemariaeditora.com.br http://127.0.0.1:4380; form-action 'self'\n  X-Robots-Tag: noindex, nofollow\n# END JM GUIDE ROUTE\n\n# BEGIN JM INFLUENCER PAGES\n/combo-da-cassia-kawamura/*\n  X-Robots-Tag: noindex, nofollow\n/combo-da-forja-diaria/*\n  X-Robots-Tag: noindex, nofollow\n/influenciadoras-assets/*\n  Cache-Control: public, max-age=31536000, immutable\n# END JM INFLUENCER PAGES\n",
+      "headersSha256": "c897fc7d18f8df927dda598fc129044d24469593b77e36f4bebbef2e43fda3d4",
+      "redirects": "/assinatura-pitiquinhos/ https://clube.joaoemariaeditora.com.br/assinatura-pitiquinhos/ 302\n/assinatura-pitiquinhos https://clube.joaoemariaeditora.com.br/assinatura-pitiquinhos/ 302\n/combos-influenciadoras/combo-da-amanda-goulart/ https://clube.joaoemariaeditora.com.br/combo-da-amanda-goulart/ 302\n/combos-influenciadoras/combo-da-amanda-goulart https://clube.joaoemariaeditora.com.br/combo-da-amanda-goulart/ 302\n/combos-influenciadoras/combo-da-amanda-goulart/* https://clube.joaoemariaeditora.com.br/combo-da-amanda-goulart/ 302\n/combos-influenciadoras/combo-da-camila-abadie/ https://clube.joaoemariaeditora.com.br/combo-da-camila-abadie/ 302\n/combos-influenciadoras/combo-da-camila-abadie https://clube.joaoemariaeditora.com.br/combo-da-camila-abadie/ 302\n/combos-influenciadoras/combo-da-camila-abadie/* https://clube.joaoemariaeditora.com.br/combo-da-camila-abadie/ 302\n/combos-influenciadoras/combo-da-icara-barbosa/ https://clube.joaoemariaeditora.com.br/combo-da-icara-barbosa/ 302\n/combos-influenciadoras/combo-da-icara-barbosa https://clube.joaoemariaeditora.com.br/combo-da-icara-barbosa/ 302\n/combos-influenciadoras/combo-da-icara-barbosa/* https://clube.joaoemariaeditora.com.br/combo-da-icara-barbosa/ 302\n/combos-influenciadoras/combo-da-laura-padilha/ https://clube.joaoemariaeditora.com.br/combo-da-laura-padilha/ 302\n/combos-influenciadoras/combo-da-laura-padilha https://clube.joaoemariaeditora.com.br/combo-da-laura-padilha/ 302\n/combos-influenciadoras/combo-da-laura-padilha/* https://clube.joaoemariaeditora.com.br/combo-da-laura-padilha/ 302\n/combos-influenciadoras/combo-da-marcelle-massa/ https://clube.joaoemariaeditora.com.br/combo-da-marcelle-massa/ 302\n/combos-influenciadoras/combo-da-marcelle-massa https://clube.joaoemariaeditora.com.br/combo-da-marcelle-massa/ 302\n/combos-influenciadoras/combo-da-marcelle-massa/* https://clube.joaoemariaeditora.com.br/combo-da-marcelle-massa/ 302\n/combos-influenciadoras/combo-da-stephany-grande-familia/ https://clube.joaoemariaeditora.com.br/combo-da-stephany-grande-familia/ 302\n/combos-influenciadoras/combo-da-stephany-grande-familia https://clube.joaoemariaeditora.com.br/combo-da-stephany-grande-familia/ 302\n/combos-influenciadoras/combo-da-stephany-grande-familia/* https://clube.joaoemariaeditora.com.br/combo-da-stephany-grande-familia/ 302\n",
+      "redirectsSha256": "51c901aa4efa3175a1f6d9a7a3fb1acfee7d315e3a5c2f1d7042ef131a69c647",
+      "redirectChecks": [
+        {
+          "path": "/assinatura-pitiquinhos/",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/assinatura-pitiquinhos/"
+        },
+        {
+          "path": "/assinatura-pitiquinhos",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/assinatura-pitiquinhos/"
+        },
+        {
+          "path": "/assinatura-pitiquinhos/app.js",
+          "status": 200,
+          "location": null
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-amanda-goulart/",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-amanda-goulart/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-amanda-goulart",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-amanda-goulart/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-amanda-goulart/areia.html",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-amanda-goulart/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-camila-abadie/",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-camila-abadie/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-camila-abadie",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-camila-abadie/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-camila-abadie/areia.html",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-camila-abadie/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-icara-barbosa/",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-icara-barbosa/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-icara-barbosa",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-icara-barbosa/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-icara-barbosa/areia.html",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-icara-barbosa/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-laura-padilha/",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-laura-padilha/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-laura-padilha",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-laura-padilha/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-laura-padilha/areia.html",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-laura-padilha/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-marcelle-massa/",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-marcelle-massa/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-marcelle-massa",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-marcelle-massa/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-marcelle-massa/areia.html",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-marcelle-massa/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-stephany-grande-familia/",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-stephany-grande-familia/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-stephany-grande-familia",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-stephany-grande-familia/"
+        },
+        {
+          "path": "/combos-influenciadoras/combo-da-stephany-grande-familia/areia.html",
+          "status": 302,
+          "location": "https://clube.joaoemariaeditora.com.br/combo-da-stephany-grande-familia/"
+        }
+      ],
+      "canaries": [
+        {
+          "path": "/index.html",
+          "sha256": "08715732b59e65b89173925665a24d9a56fcbedcf60131a5457187b82d2eda12"
+        },
+        {
+          "path": "/assinatura-2-anos/index.html",
+          "sha256": "eae4c2718b26cb47245ed0bb8289f112ad159f785f3bf3fa69f38b81cd09d68c"
+        },
+        {
+          "path": "/assinatura-2-anos/obrigado/index.html",
+          "sha256": "064cadfc99cf586eede4824835fef3bfe0df204102b45d6e2dfc721a97ebb210"
+        },
+        {
+          "path": "/guia-de-leitura/index.html",
+          "sha256": "59c748db904c5981975540f15fe46f92cb1bfdf78cfeaab1da1cc2b20232d497"
+        }
+      ],
+      "ownedFiles": [
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/_astro/_slug_.DjUn-eVI.css",
+          "nativeHash": "52b8cba95a63ada34b0a23b1bb4e8b95",
+          "sha256": "43e69184b308ceaba06590a3f1f8853d218bc262ac6c77ac9b3956561dac7d9d",
+          "bytes": 16863
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/_astro/index.CzutZt1i.css",
+          "nativeHash": "41ab3398410e8ebea75e566614ea13a5",
+          "sha256": "11eb1832667eae9d2d78c281ab7656ae252c07a2320a7d023bb66e841be78a26",
+          "bytes": 1622
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/_astro/landing.IuDtGJbG.mjs",
+          "nativeHash": "4c9091401549b783309d2ebe4f0c7c71",
+          "sha256": "a948e9ea2f97b0b25ba7bc18888d476e4956eb5326e8a6fb40b4e3c6d9b658d8",
+          "bytes": 2519
+        },
+        {
+          "path": "/combo-da-cassia-kawamura/index.html",
+          "nativeHash": "9181e66142ef3b769fd26f52b627981f",
+          "sha256": "bee8820982459a58f6918fb5dc5f52d5fa8ab39653866e3ddd7528e81319db67",
+          "bytes": 22364
+        },
+        {
+          "path": "/combo-da-forja-diaria/index.html",
+          "nativeHash": "3d682e5c840a6794496f4448f3d02c94",
+          "sha256": "b2bbd81c5fb35526ad3a77ecb18801760315d668eb7f59adb8411b6ba9f2a5cb",
+          "bytes": 20213
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/fonts/New-Spirit-Regular-Condensed.ttf",
+          "nativeHash": "bf0a8bafaf7af328cfb53ceb93622459",
+          "sha256": "4d27f07df8d3635dfd8234228fe85af29d38817216738c9251c386310851176e",
+          "bytes": 116584
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/fonts/New-Spirit-SemiBold-Condensed.woff2",
+          "nativeHash": "04f98e90bc08714059da02dbc2d574f7",
+          "sha256": "28a49eece8beea6bc21106d71ab427115d772a826f433db3d1666745144a3f17",
+          "bytes": 32528
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/fonts/Satoshi-Variable.woff2",
+          "nativeHash": "de12b81aee7129ed14e5696469cf6ffc",
+          "sha256": "ea7da896b4b9e6283e98fa5c9c38e7beaf58f5cd42b2bc40bcc4c95d8aecd0fe",
+          "bytes": 42660
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/black/logo-black-novembro-horizontal-branca.svg",
+          "nativeHash": "631c12e7c80f4bddc5d5d98900d17455",
+          "sha256": "300d6093364236701a2d33bc74471e61044d9b2436383bb6e7ba2e6a80458c85",
+          "bytes": 23797
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/black/logo-black-novembro-horizontal-claro.svg",
+          "nativeHash": "47e246fdc8f6f4f012ee6aa113951794",
+          "sha256": "6d725d90fe7c04bb207f9ec3b8a0de4cb4f4abad955a898099dc7aa7b65f933a",
+          "bytes": 23795
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/bicho.webp",
+          "nativeHash": "8d7584a73729396538bcdb2f6fbdc951",
+          "sha256": "503ead88e185a14f7ad7c62406505a1f8fca4e51be5a561faf6b52f09b7d7879",
+          "bytes": 17328
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/boca.webp",
+          "nativeHash": "7626bc326c3bedf22a8fc03b058ea033",
+          "sha256": "d7a6476dfc5a24a83a16b8c70a74f9492883704a5949acc9dd30b77dcb2a7490",
+          "bytes": 18202
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/cavalinho.webp",
+          "nativeHash": "be29e00f246acff180cd7b2c5b195fdd",
+          "sha256": "0c3a43dad214eb750254f3e6e37a95038ccd9f84c5fbb38c1e5af7e081829119",
+          "bytes": 13190
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/desliguem.webp",
+          "nativeHash": "bff2b83288f32d9e69ea7365c0d489ae",
+          "sha256": "4de2f533cc26e24ac1f5a4ddccc8502ebd2d4dbaa3bb05d93069cd76bbdf0214",
+          "bytes": 24802
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/esopo.webp",
+          "nativeHash": "c8d029d942c6982376e85668dc8d5290",
+          "sha256": "c081c002991e71180821ea496589ce2ff48e890dee7f3f0302c8951e27b80bef",
+          "bytes": 18688
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/filhotes.webp",
+          "nativeHash": "f0ad9e376b139f9f0c706f50e3bc1ebe",
+          "sha256": "c60f92b8baa25e6425ccb3c803a5e82aae85c594d03c87701ebc625ffc29da42",
+          "bytes": 19088
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/francisco.webp",
+          "nativeHash": "cb4e28dad9b41b357b6c0d8588a050d0",
+          "sha256": "6d0a29d0777ea3b9725f3f7cfc593dcd2b9a98cf9ed711ca6f458c833543bf86",
+          "bytes": 10214
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/gatos.webp",
+          "nativeHash": "63445cf365d492aef19bd833a149457c",
+          "sha256": "595e6b2ade55908f0047f22067ecd0aa841cf7a47b411aa6686193d2cc971ff2",
+          "bytes": 20250
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/gregos.webp",
+          "nativeHash": "2ea4cbe7770ba3f1751ae854ecc123d5",
+          "sha256": "cbf03380eca003f5c443375496749d6a0c2be4234eb7bc91a9ad478f988c2e9b",
+          "bytes": 12922
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/hora-dormir.webp",
+          "nativeHash": "2211ebd6e33d6626652fdf5371fbc134",
+          "sha256": "7d63eb23d87e2fd8dfae9bc06372c311b3a4b5773dda064a6ff270546d79c2dc",
+          "bytes": 15062
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/lua.webp",
+          "nativeHash": "ce63f59daf258e59cbfdd0e192ea1ca0",
+          "sha256": "0a2a2c46f4c015c048ca19fdb9b6115c1f42e7952633f16fa196fcee327cf7fc",
+          "bytes": 11762
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/miloca.webp",
+          "nativeHash": "492e7feb002f84a86b52df3e85ed5346",
+          "sha256": "5d8d7d4fafa6deccf350c3e5705bac62bbad9d91c8f9bf400429db53e24eedaa",
+          "bytes": 14776
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/nicolau.webp",
+          "nativeHash": "a92d717669e4310d760fa1fd00b13504",
+          "sha256": "3feebda48abb0bedabede4840c1cc3b459221c56aab148967953e3cde42daa94",
+          "bytes": 19080
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/orientais.webp",
+          "nativeHash": "9aab902ad873279ef2d76e524dda36ec",
+          "sha256": "cc6cadb911d42517a20f7aa08e7c4d7ca5bef2e903d3ce9abfcc77b88ebcb771",
+          "bytes": 18902
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/pato-sapato.webp",
+          "nativeHash": "84e7fe40568238cd1881e0bd105c8a80",
+          "sha256": "4a5772b4d41857d89dada6584523dbdaedd4cd55e94434530feefae1eef31681",
+          "bytes": 14410
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/poemas-ilustrados.webp",
+          "nativeHash": "6d46ff2c3cb0f227736c35509e058c7e",
+          "sha256": "0e7bcd0ba7d47f653c09729ad7fe51972de8136bcb621a9cd9abf03967929c41",
+          "bytes": 15636
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/roy.webp",
+          "nativeHash": "625db86684d44a9dcc79bb3213c66c45",
+          "sha256": "3fb7103d285d90c53ff6078698017fd8a3f9cda70191ff92d2af3ea8cac152b6",
+          "bytes": 24216
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/tias.webp",
+          "nativeHash": "fdfebae96af3aa2efedd8abadc2fd4ff",
+          "sha256": "9686c316daa1eff4cec427303760aee332d261c45c585236263cb41b19463d1f",
+          "bytes": 8568
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/capas/ursinhos.webp",
+          "nativeHash": "5cac82513741367f7173b381301587cd",
+          "sha256": "8d620d82829b2c92050399de4b873440cad3399b2b7610e4d6432f7d48a88aa1",
+          "bytes": 32466
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/cassia/compartilhar.jpg",
+          "nativeHash": "f51525dad8a67a17a7a35ea02b6b4ee0",
+          "sha256": "c053313304eab708302795fb5d0bfc4e38a1d3d5cbe42fc24f4631f7cbf7aa3f",
+          "bytes": 101777
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/cassia/foto.webp",
+          "nativeHash": "99de04075bdfcae5c37baea9c4aa13b5",
+          "sha256": "15f1221c697785c1b0c0342a8701029ba89d2007fce6bacd0a4ea8ac5a817182",
+          "bytes": 88920
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/cassia/hero.webp",
+          "nativeHash": "2de9ad00c19b088a1f43db339e7c8ce1",
+          "sha256": "559b1beb0012fd1a0a9fb170bfcf2c1de25f1eb05ff3e30cb7185caf9ea9c981",
+          "bytes": 235562
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/cassia/mockup.webp",
+          "nativeHash": "1e995d2d01e79fd35e7f87c1d126196d",
+          "sha256": "c79c1f7a684873cdfa1c749fe05de67ae3384976529df7084d58a17eef0e87a2",
+          "bytes": 329986
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/cassia/oferta.webp",
+          "nativeHash": "0da3deda962526f62e141154a01b69d7",
+          "sha256": "3dca955dd42b9a63eaf5d8a106a2119663937449bed9c1224fc9516c5303081f",
+          "bytes": 232960
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/forja/compartilhar-8-livros-v1.jpg",
+          "nativeHash": "db54e3c3749d15a6b6cbdeabe9a85e9a",
+          "sha256": "159acef7f3564eb55dd83d32d441d383e361efd838356f102c7d917c87b2d7f6",
+          "bytes": 209878
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/forja/compartilhar.jpg",
+          "nativeHash": "3795a3bdea0dedebc38859748c2ff289",
+          "sha256": "49279a04e9eb0cda7651c019f3b56b49072c4ebefb25513338318f6d9196cc75",
+          "bytes": 102923
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/forja/foto.webp",
+          "nativeHash": "1ed55bc6e17fbc2436e58fa1fe31aafa",
+          "sha256": "ddaa85dd8746b67d93a11efacceed70690dbd37168420da23151cd245c859405",
+          "bytes": 44112
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/forja/hero-8-livros-v1.webp",
+          "nativeHash": "26c18b69c6fce225520579c8e6e5c3f4",
+          "sha256": "10d23a643ca04c540c21b85029b49de50bf5026e709df793f0f64dfdb64d9e1f",
+          "bytes": 131986
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/forja/hero.webp",
+          "nativeHash": "6866c7252bf8bcefe706e5e5362a632c",
+          "sha256": "8e99646f2dedc1d77791e7c811a0fa5cca7274fa9dfd6a198a0a0d0d5e4ed311",
+          "bytes": 217136
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/forja/mockup-8-livros-v1.webp",
+          "nativeHash": "caa6a46a74b006102f48ce2554204f09",
+          "sha256": "071cf2356e9bec053ee3ef4a60198c3474e7b036c9026e6072085d3fd594204a",
+          "bytes": 157366
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/forja/mockup.webp",
+          "nativeHash": "3b75a58ed9da71d40147993a6581919b",
+          "sha256": "61e6a46a082570eae1d9c6230b758b3ec01d087e58ce4cabf544152b6f5f4340",
+          "bytes": 282716
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/forja/oferta-8-livros-v1.webp",
+          "nativeHash": "70c309ccd401db6319f7255aadadab17",
+          "sha256": "34ec731a2c3feb27615c769a8af1fb8af45ec823f759d92f4e2619a57b9b9c41",
+          "bytes": 148632
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/forja/oferta.webp",
+          "nativeHash": "346c40026c6abfcc95dec774b2dd1ac3",
+          "sha256": "abd1b1e724013e05d576532f8b4b1f66601fe969c717ba0948d20a96dda13e31",
+          "bytes": 213276
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/forja/perfil-original.jpg",
+          "nativeHash": "d9a6dafdb122c71311b92cd7f4e8f1db",
+          "sha256": "766815038529359db08f1aac7b03e79a78c291f60dd5436b4d4faee0c0e7c448",
+          "bytes": 47946
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/icones/conversa.svg",
+          "nativeHash": "c06b9af15860ca3e4b7b5947f1258d4d",
+          "sha256": "2830869d025c6e6d16bc65ef30cd17130fe1392fbcead2f181f4b89b496c49b7",
+          "bytes": 339
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/icones/coracao.svg",
+          "nativeHash": "e41e5d2230b0bb080b5e2a2c06a3664c",
+          "sha256": "87d8df7cea566763c59a9e3f6287d0a72933c44532258e4c697bfa7ab205f891",
+          "bytes": 375
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/icones/estrela.svg",
+          "nativeHash": "1507548c8775d5c6df0001f34f5ce4c3",
+          "sha256": "3be2d81da14f0083a73dfdf530bf9ed5593d38e297eecb1d77cf56d77bfe89d2",
+          "bytes": 375
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/icones/globo.svg",
+          "nativeHash": "5487d6ab1479b0a230790fc85b24006b",
+          "sha256": "4126a1eee946b6a3fa517c813d7d1a6de27bea3d8297cb5cb0f41334d539640c",
+          "bytes": 427
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/marca/borboleta-azul.webp",
+          "nativeHash": "f170e8d9ddf69cb95e1826bc002f41a3",
+          "sha256": "5bcdc65f1aa6d639281d8a1f97bc78038267e8c2069840ef72724d0a59af4f07",
+          "bytes": 27356
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/marca/borboleta-rosa.webp",
+          "nativeHash": "337454e795392edb5305097c78b43f63",
+          "sha256": "3efda9aec9e1bd5c7b608d6d0268ccbc04edd4efb8dfee7440871aaaff382032",
+          "bytes": 27508
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/marca/ceu.webp",
+          "nativeHash": "2feac099f92896100939aa74fae35374",
+          "sha256": "270291c927df90a1630fb634b656f574a3ec35bea57d13f937846adf5ffc730c",
+          "bytes": 11330
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/marca/favicon-cofre-8ab5869e.png",
+          "nativeHash": "f8b59bbf3e62d947fd5faeea09c45ebb",
+          "sha256": "8ab5869ea791c26db7ec74ee48306f57cfb0352971d30fd488fa35808ec9bebc",
+          "bytes": 4789
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/marca/logo-jm.png",
+          "nativeHash": "5cdac4c319adacb114b1ac65d7d96682",
+          "sha256": "7bc1acf54b4e4b63e4b48ee23a16c6bc28fc945e53f8c853b9d1c54843dc40d5",
+          "bytes": 16885
+        },
+        {
+          "path": "/influenciadoras-assets/b87d586a8af4110e/media/marca/mae-e-filha.webp",
+          "nativeHash": "7f3f4dcfdb4384072356aa2a1e4f93f4",
+          "sha256": "a9d5fa198cd67e80e5fea42f22c9558434813200fd28762c4ba0b753d690618b",
+          "bytes": 54028
+        }
+      ]
     }
   ]
 }
