@@ -2,15 +2,17 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import { config, json, sha, write, root, argumentsFor } from './project.mjs';
-import { prepareLpArtifact, nativeHash, manifestHash, mergeLpManifest } from './lp-artifact.mjs';
+import { prepareLpArtifact, nativeHash, manifestHash, mergeLpManifest,assertNoRedirectCollisions } from './lp-artifact.mjs';
+import {receiptsFile,selectReceipt,publicReceipt} from './publication-receipts.mjs';
 
 const canonicalPath = file => file.endsWith('/index.html') ? file.slice(0, -10) : file;
 const exists = async p => Boolean(await fs.stat(p).catch(() => null));
-const owned = file => /^\/combo-da-(?:cassia-kawamura|forja-diaria)\/index\.html$/.test(file) || file.startsWith('/influenciadoras-assets/');
 const sorted = object => Object.fromEntries(Object.entries(object).sort(([a], [b]) => a.localeCompare(b)));
 const c = await config(), verifyOnly = process.argv.slice(2).join(' ') === '--verify';
 const options = verifyOnly ? { apply: false } : argumentsFor(process.argv.slice(2));
-const artifact = await prepareLpArtifact();
+let artifact = verifyOnly?null:await prepareLpArtifact();
+const pagePaths=artifact?.pages.map(p=>p+'index.html')||[];
+const owned=file=>pagePaths.includes(file)||file.startsWith(artifact.prefix);
 const accountId = process.env.CLOUDFLARE_ACCOUNT_ID, token = process.env.CLOUDFLARE_API_TOKEN;
 assert.equal(accountId, c.cloudflare.accountId); assert(token);
 const projectPath = '/pages/projects/jm-lp', apiRoot = 'https://api.cloudflare.com/client/v4/accounts/' + accountId;
@@ -42,23 +44,23 @@ async function publicBytes(file, origin = c.origin) {
 async function verify(current, plan) {
   const d = await snapshot(); assert.equal(d.id, current.deploymentId, 'Another deployment became canonical; prepare a merge from its exact manifest');
   assert.equal(manifestHash(d.files), plan.fullManifestHash);
-  for (const [file, hash] of Object.entries(current.preserved)) assert.equal(d.files[file], hash, 'Unrelated file changed: ' + file);
+  for (const [file, hash] of Object.entries(current.preserved||{})) assert.equal(d.files[file], hash, 'Unrelated file changed: ' + file);
   for (let i = 0; i < artifact.files.length; i += 6) await Promise.all(artifact.files.slice(i, i + 6).map(async f => {
     const { response, bytes } = await publicBytes(f.path);
     assert.equal(sha(bytes), f.sha256, 'Published content mismatch: ' + f.path);
     assert.equal(nativeHash(bytes, f.path), f.nativeHash);
     if (f.path.endsWith('.html')) assert(response.headers.get('x-robots-tag')?.includes('noindex'));
   }));
-  for (const canary of current.canaries) {
+  for (const canary of current.canaries||[]) {
     const { bytes } = await publicBytes(canary.path); assert.equal(sha(bytes), canary.sha256, 'Shared page changed: ' + canary.path);
   }
-  for (const check of current.redirectChecks) {
+  for (const check of current.redirectChecks||[]) {
     const r = await fetch(new URL(check.path, c.origin), { redirect: 'manual', signal: AbortSignal.timeout(20000) });
     assert.equal(r.status, check.status); assert.equal(r.headers.get('location'), check.location);
   }
   assert.equal((await project()).canonical_deployment.id, current.deploymentId);
-  const report = { ok: true, mode: verifyOnly ? 'read-only' : 'apply', verifiedAt: new Date().toISOString(), deploymentId: d.id, previousDeploymentId: plan.previousDeploymentId, project: 'jm-lp', urls: artifact.pages.map(p => c.origin + p), sourceCommit: artifact.sourceCommit, artifactSha256: artifact.sourceArtifactSha256, fullManifestHash: plan.fullManifestHash, preservedFiles: Object.keys(current.preserved).length, publishedFilesVerified: artifact.files.length, canariesVerified: current.canaries.length, redirectsVerified: current.redirectChecks.length, dnsWrites: 0, platformWrites: writes };
-  await write('.runtime/lp-verified.json', { ...report, headers: current.headers, redirects: current.redirects, redirectChecks: current.redirectChecks, preserved: current.preserved, plan, artifact });
+  const report = { ok: true, mode: verifyOnly ? 'read-only' : 'apply', verifiedAt: new Date().toISOString(), deploymentId: d.id, previousDeploymentId: plan.previousDeploymentId, project: 'jm-lp', urls: artifact.pages.map(p => c.origin + p), sourceCommit: artifact.sourceCommit, artifactSha256: artifact.sourceArtifactSha256, fullManifestHash: plan.fullManifestHash, preservedFiles: Object.keys(current.preserved||{}).length, publishedFilesVerified: artifact.files.length, canariesVerified: (current.canaries||[]).length, redirectsVerified: (current.redirectChecks||[]).length, dnsWrites: 0, platformWrites: writes };
+  await write('.runtime/lp-verified.json', { ...report, headers: current.headers, redirects: current.redirects, redirectChecks: current.redirectChecks, canaries:current.canaries||[],preserved: current.preserved||{}, plan, artifact });
   console.log(JSON.stringify(report)); return report;
 }
 async function uploadAssets(added) {
@@ -89,21 +91,30 @@ try {
   assert.equal((await api('GET', '')).name, c.cloudflare.accountName);
   assert.equal((await api('GET', projectPath + '/domains/lp.joaoemariaeditora.com.br')).status, 'active');
   if (verifyOnly) {
-    const current = await json('.runtime/lp-current.json');
-    assert.equal(current.sourceCommit, artifact.sourceCommit); await verify(current, current.plan);
+    const remote=await snapshot(),remoteHash=manifestHash(remote.files),prior=await json('.runtime/lp-verified.json').catch(e=>{if(e.code!=='ENOENT')throw e;return null;}),currentIntent=await json('.runtime/lp-current.json').catch(e=>{if(e.code!=='ENOENT')throw e;return null;});
+    let receipt;
+    if(prior?.deploymentId===remote.id&&prior.fullManifestHash===remoteHash)receipt=publicReceipt(prior);
+    else if(currentIntent?.deploymentId===remote.id&&currentIntent.plan.fullManifestHash===remoteHash){const staged=await json('.runtime/lp-artifact.json');assert.equal(staged.sourceCommit,currentIntent.plan.sourceCommit);assert.equal(manifestHash(Object.fromEntries(staged.files.map(f=>[f.path,f.nativeHash]))),currentIntent.plan.addedManifestHash);artifact=staged;receipt=publicReceipt({...currentIntent,fullManifestHash:remoteHash,artifact:staged});}
+    else receipt=selectReceipt(await json(receiptsFile),{id:remote.id,manifestHash:remoteHash});
+    if(!artifact&&prior?.artifact?.prefix&&JSON.stringify(prior.artifact.files)===JSON.stringify(receipt.ownedFiles))artifact=prior.artifact;
+    if(!artifact)artifact={pages:receipt.ownedFiles.filter(f=>f.path.endsWith('/index.html')).map(f=>f.path.slice(0,-10)),files:receipt.ownedFiles,sourceCommit:receipt.sourceCommit,sourceArtifactSha256:receipt.artifactSha256};
+    const current={...receipt,headers:receipt.headers,redirects:receipt.redirects,preserved:{},canaries:receipt.canaries,redirectChecks:receipt.redirectChecks};
+    await verify(current,{fullManifestHash:receipt.manifestHash,previousDeploymentId:receipt.previousDeploymentId});
   } else {
     const lockFile = process.env.JM_LP_PUBLICATION_LOCK_FILE || path.join(root, '.runtime/lp-publication.lock');
     await fs.mkdir(path.dirname(lockFile), { recursive: true }); lock = { handle: await fs.open(lockFile, 'wx'), file: lockFile };
     const before = await snapshot();
-    const controlsFile = process.env.JM_LP_BASELINE_FILE; assert(controlsFile, 'Supply a verified receipt of the current shared deployment headers/redirects');
-    const baseline = JSON.parse(await fs.readFile(controlsFile, 'utf8'));
+    const controlsFile = process.env.JM_LP_BASELINE_FILE;
+    const baseline = controlsFile?JSON.parse(await fs.readFile(controlsFile, 'utf8')):selectReceipt(await json(receiptsFile),{id:before.id,manifestHash:manifestHash(before.files)});
     assert.equal(baseline.deploymentId, before.id, 'Shared controls receipt is stale');
     assert.equal(baseline.manifestHash, manifestHash(before.files), 'Shared baseline file map changed');
     assert.equal(sha(baseline.headers), baseline.headersSha256); assert.equal(sha(baseline.redirects), baseline.redirectsSha256);
     const added = Object.fromEntries(artifact.files.map(f => [f.path, f.nativeHash]));
     assert(Object.keys(added).every(owned));
     const previousOwn = await json('.runtime/lp-verified.json').catch(e => { if (e.code !== 'ENOENT') throw e; return null; });
-    const { full, preserved } = mergeLpManifest(before.files, added, previousOwn?.artifact.files || []);
+    const knownOwned=baseline.ownedFiles||previousOwn?.artifact?.files||[];
+    assertNoRedirectCollisions(baseline.redirects,before.files,pagePaths);
+    const { full, preserved } = mergeLpManifest(before.files, added, knownOwned,pagePaths);
     const oldHeaders = baseline.headers.replace(/\n# BEGIN JM INFLUENCER PAGES[\s\S]*?# END JM INFLUENCER PAGES\n?/g, '');
     const headers = oldHeaders + '\n# BEGIN JM INFLUENCER PAGES\n' + artifact.pages.map(p => p + '*\n  X-Robots-Tag: noindex, nofollow\n').join('') + c.publication.assetPrefix + '*\n  Cache-Control: public, max-age=31536000, immutable\n# END JM INFLUENCER PAGES\n';
     const redirects = baseline.redirects;

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Páginas João & Maria"
+  short_description: "Criar e publicar páginas Astro no LP com preservação do site."
+  default_prompt: "Use $jm-influencer-pages para criar ou atualizar uma página neste repositório, validar mobile e preparar a publicação por CLI."

@@ -1,67 +1,102 @@
 # Páginas das influenciadoras — João & Maria
 
-Astro estático e código no GitHub corporativo `dados-jem/paginas-influenciadoras`. As URLs finais são `https://lp.joaoemariaeditora.com.br/combo-da-cassia-kawamura/` e `https://lp.joaoemariaeditora.com.br/combo-da-forja-diaria/`. A publicação acrescenta essas rotas ao projeto Cloudflare Pages compartilhado `jm-lp`, preservando o mapa nativo dos demais arquivos. O projeto `paginas-influenciadoras` continua disponível para previews separados. A hospedagem destas páginas não depende da Hostinger.
+Páginas estáticas em **Astro**, versionadas neste repositório público e publicadas no **Cloudflare Pages**. O domínio é sempre `https://lp.joaoemariaeditora.com.br/`: cada campanha recebe sua própria slug. Produção usa o projeto compartilhado `jm-lp`; o projeto `paginas-influenciadoras` serve apenas para previews independentes.
 
-## Editar e conferir
+## Começar com um agente
 
-Requisitos: Node.js 24, npm e Git. Clone este repositório pela própria conta autorizada no GitHub.
+Compartilhe [o link deste repositório](https://github.com/dados-jem/paginas-influenciadoras) e peça:
+
+> Leia AGENTS.md e .agents/skills/jm-influencer-pages/SKILL.md. Prepare uma nova página ou edite a página indicada, seguindo Astro, GitHub e Cloudflare Pages. Preserve as outras rotas do LP e apresente a prévia antes de publicar.
+
+A [skill versionada](.agents/skills/jm-influencer-pages/SKILL.md) acompanha o clone. Codex pode descobri-la em `.agents/skills/`; outros agentes podem ler o arquivo diretamente. O link permite ler o material público. Para enviar alterações e publicar, cada pessoa autentica a própria conta no GitHub e Cloudflare. O link não instala ferramentas nem concede acesso à conta.
+
+As instruções tratam do processo técnico e valem igualmente para qualquer colaborador. Não há funções pessoais ou aprovação obrigatória de outra pessoa no fluxo do repositório.
+
+Requisitos: Node.js24, npm, Git e GitHub CLI (`gh`).
 
 ```sh
+git clone https://github.com/dados-jem/paginas-influenciadoras.git
+cd paginas-influenciadoras
 npm ci
+npm test
+npm run build
 npm run dev
 ```
 
-- `src/content/cassia-kawamura.html` e `src/content/forja-diaria.html`: textos e seções de cada página, sem scripts. O HTML é renderizado pelo layout Astro compartilhado.
-- `src/content/pages.json`: títulos, descrição, imagens, preço cheio, descontos, parcelas, estado de publicação e URL oficial do produto.
-- `public/media/`: imagens. `public/fonts/`: fontes locais.
-- A composição inicial da Forja tem oito livros, sem Miloca e Esopo. `composition.books` em `pages.json` conserva as capas originais e os preços cheios dos oito componentes. O build exige que a lista, a soma e as quatro artes correspondam à mesma composição. Uma ampliação futura precisa atualizar esses dados, a copy e o cadastro da loja.
-- `src/styles/landing.css`: visual compartilhado. `src/scripts/landing.mjs`: carrossel e repasse de UTMs.
+## Criar uma página
 
-O estado `draft` usa preços provisórios, CTAs para a oferta e analytics comerciais desativados. Para liberar a venda, conferir o cadastro real na loja, preencher `productUrl`, atualizar os valores, marcar `pricing.verified: true` e só então mudar `status` para `published`. A primeira liberação usa os produtos WBuy5981816/Cássia e5981819/Forja, vinculados aos kits Base110270732 e110270733. As páginas apontam para esses cadastros existentes. Não inventar preços ou estoque. A regra de descontos é40% para o público e60% para assinantes; qualquer revisão comercial deve ser aprovada. Não há troca automática de campanha nem vencimento inventado neste projeto.
-
-A indexação é independente da compra: `indexable: false` conserva `noindex` também em páginas comerciais. `public/robots.txt`, `public/_headers` e os controles atuais do `jm-lp` mantêm a mesma política. Uma alteração de SEO exige revisão própria dos controles. GTM `GTM-W8HJBC4R` e NEMU `ZCGhdVP3U2` estão no layout e ativam somente nas páginas comerciais, uma vez por página. Não duplicar tags.
-
-Para recompor hero, mockup, oferta e compartilhamento da Forja, use `scripts/compositions.mjs`. O executor desenha uma composição nativa com as capas originais, sem gerar ou alterar capas. `npm run assets` prepara a prévia em dry-run, sem alterar os arquivos públicos; `npm run assets -- --apply --plan-hash HASH_DA_PREVIA` grava os quatro arquivos exatos e verifica seus hashes. `npm run assets -- --check` é read-only e confere fontes, composição e saídas. O build também executa essa conferência. Assets anteriores são preservados, e as novas imagens recebem o sufixo da revisão.
-
-## Publicar pela CLI
+Copie `examples/new-page.json` para um brief próprio e informe slug, título, descrição, headline, introdução, imagem local e seções. Não copie preços, estoque, produtos ou depoimentos de outra campanha.
 
 ```sh
+npm run page:create -- --file examples/new-page.json
+npm run page:create -- --file examples/new-page.json --apply --plan-hash HASH_DA_PREVIA
+```
+
+O primeiro comando é **dry-run, offline**. O segundo cria somente o HTML da nova página e sua entrada em `src/content/pages.json`, com backup e releitura. Duplicatas, slugs reservadas e sobrescrita são recusadas. O rascunho nasce com `delivery: "local"`, `status: "draft"`, `pricing: null`, `productUrl: null` e `indexable: false`. Pode ser visto no servidor local, mas não entra na produção enquanto `delivery` continuar `local`.
+
+Edite o conteúdo, valide a campanha real e escolha explicitamente `delivery: "production"` para incluir sua rota no próximo deployment. Para vender, cadastre ou confira o produto real, preencha `productUrl` e `pricing`, marque `pricing.verified: true` e `status: "published"`. O build impede uma venda sem destino oficial e preços conferidos. `status` controla compra/analytics; `delivery` controla publicação; `indexable` controla SEO. Não são o mesmo campo.
+
+O template neutro tem três botões de oferta. As páginas originais preservam seus cinco botões e o layout existente. Não é necessário editar rotas Astro nem o publicador para acrescentar uma campanha ao registro.
+
+## Editar e validar
+
+- `src/content/pages.json`: metadados, publicação, preços e destino comercial.
+- `src/content/<key>.html`: conteúdo de cada página, sem JavaScript ou handlers inline.
+- `public/media/` e `public/fonts/`: imagens e fontes locais.
+- `src/layouts/InfluencerLanding.astro`: layout, metadados e rastreamento compartilhados.
+- `src/styles/campaign.css`: template neutro; `landing.css`: páginas originais.
+- `src/scripts/landing.mjs`: carrossel e preservação de UTMs.
+
+```sh
+npm run skill:check
 npm test
-npm run build
-git add src public config scripts tests README.md package.json package-lock.json astro.config.mjs .github .gitignore .env.example
-git commit -m "Atualizar páginas das influenciadoras"
 npm run build
 ```
 
-A segunda compilação vincula o artefato ao commit exato. O diretório de trabalho deve estar limpo. O CI do GitHub valida testes e build; um push sozinho não publica no Pages.
+Valide primeiro320/390/412px, depois768/1440px: sem rolagem horizontal, imagens legíveis com dimensões, CTA acessível ao toque, foco/teclado, links e carrossel quando existir. Em QA local, bloqueie analytics e destinos externos. O build confere referências, canonical, estado comercial e budgets de HTML, JavaScript e artefato. GTM e NEMU já pertencem ao layout e só ativam em páginas comerciais; não duplique tags. `noindex` permanece até uma decisão específica de SEO.
 
-Autentique a própria conta no GitHub CLI (`gh auth login`) e configure no ambiente privado `CLOUDFLARE_ACCOUNT_ID` e `CLOUDFLARE_API_TOKEN`. Colaboradores usam suas próprias contas com permissão de escrita neste repositório; a verificação exige que o dono do recurso continue sendo `dados-jem`, sem exigir compartilhamento do login corporativo. Somente a criação inicial de um repositório ainda ausente exige o proprietário corporativo. Reutilize uma credencial identificável da João & Maria com os acessos necessários a leitura da conta e edição de Pages. Não copie a chave de outra pessoa, não cole segredos no chat e não grave em Git. O GitHub do projeto deve permanecer privado. A concessão de acessos às pessoas é feita pelo responsável da J&M.
+## Versionar e publicar
+
+O repositório é **público por decisão do proprietário**. Nunca versionar `.env`, cookies, tokens, e-mails de acesso, relatórios privados ou dados de clientes. Contas colaboradoras precisam de permissão de escrita no repositório. No Cloudflare, use a conta J&M e o papel específico `Cloudflare Pages Admin`, sem compartilhar o login corporativo. Esse papel cobre os projetos Pages da conta; o executor limita a publicação deste fluxo ao `jm-lp`.
+
+Autentique `gh auth login` na própria máquina. Configure `CLOUDFLARE_ACCOUNT_ID` e `CLOUDFLARE_API_TOKEN` em ambiente privado, usando uma credencial própria e identificável com leitura da conta e edição de Pages. `.env.example` documenta os nomes; os comandos não importam segredos de outro computador. `GITHUB_CLI_BIN` permite selecionar o executável `gh` instalado.
 
 ```sh
+git pull --ff-only origin main
+# revise e adicione apenas os arquivos da alteração
+git add CAMINHOS_REVISADOS
+git commit -m "Adicionar página da campanha"
+npm test
+npm run build
 npm run repository
 npm run repository -- --apply --plan-hash HASH_DA_PREVIA
 npm run deploy
 npm run deploy -- --apply --plan-hash HASH_DA_PREVIA
+npm run publication:record
+npm run publication:record -- --apply --plan-hash HASH_DA_PREVIA
+git add config/publication-receipts.json
+git commit -m "Registrar publicação verificada"
+npm run repository
+npm run repository -- --apply --plan-hash HASH_DA_PREVIA
+npm run verify:lp
 ```
 
-Cada executor é `dry-run` por padrão, valida a conta e os alvos exatos, congela o hash do plano, limita as mutações e faz releitura. `GITHUB_CLI_BIN` permite apontar para a instalação do `gh` quando ele não está no PATH. Upload com resultado incerto não é reenviado: confira o projeto e os recibos em `.runtime/` primeiro.
+Cada `apply` usa o hash do **comando de prévia imediatamente correspondente**. O build deve corresponder ao commit, com diretório limpo. O CI valida testes/build; um push sozinho não publica o LP. O commit final do recibo não exige outra publicação do site.
 
-O publicador de produção é `scripts/lp.mjs`, com preparação em `scripts/lp-artifact.mjs`. Os assets usam `/influenciadoras-assets/<commit>/`; home, robots, CSS e scripts das outras páginas não são substituídos. A API oficial entrega o mapa nativo completo do deployment atual; o executor preserva todos os arquivos fora do próprio escopo e acrescenta somente os seus arquivos. Cabeçalhos e redirects existentes precisam de recibo verificado do deployment exato (`JM_LP_BASELINE_FILE`), com hashes, textos `headers`/`redirects` e checks conhecidos. Não use um build antigo do site inteiro como base.
+O publicador lê o manifesto nativo do deployment canônico, conserva arquivos/headers/redirects alheios e acrescenta as páginas registradas para produção. Assets são imutáveis em `/influenciadoras-assets/<commit>/`. Slug que colide com outro conteúdo é recusada. Não faça upload do site inteiro nem altere DNS ou domínio.
 
-`npm run deploy` faz dry-run; apply exige o hash. Uma trava (`JM_LP_PUBLICATION_LOCK_FILE`, ou a trava local por padrão) protege a operação e o projeto é relido depois do upload dos assets, imediatamente antes da única criação de deployment. Alteração concorrente interrompe o apply e exige uma nova mesclagem. Depois da criação, relê o mapa completo e os bytes publicados, confere páginas anteriores e redirects, e conserva o ID anterior. Uma resposta incerta exige `npm run verify:lp`, read-only, sem repetir upload ou criação. Para eventual rollback, só restaure o deployment anterior se a versão canônica ainda for exatamente esta publicação; preserve uma publicação concorrente posterior.
+`config/publication-receipts.json` distribui somente hashes, caminhos e controles públicos verificados. Assim outro clone reconhece a versão publicada. Quando outro projeto alterar o `jm-lp`, importe o **recibo verificado daquele deployment exato** com `publication:record -- --file RECIBO`. Não invente os controles nem reutilize um recibo antigo. `JM_LP_BASELINE_FILE` aceita uma referência privada local equivalente; `JM_LP_PUBLICATION_LOCK_FILE` permite coordenar uma trava compartilhada na mesma máquina. Uma publicação concorrente interrompe a operação antes da criação e exige nova prévia.
 
-No workspace de operações, `npm run influenciadoras:publish:lp` resolve o recibo atual dos controles, reutiliza a credencial Pages do cliente em memória e usa a trava compartilhada `.agents/runtime/jm-lp-shared-publication.lock`. Apply usa `-- --apply --plan-hash HASH`; releitura usa `-- --verify`. Uma versão desconhecida dos controles interrompe a execução. Outros publicadores do `jm-lp` também devem preservar o mapa canônico e respeitar a trava; um full upload sem mesclagem pode apagar rotas concorrentes.
+Resultado incerto nunca autoriza repetir upload ou criação. Relacione o ID retornado com os recibos em `.runtime/` e faça releitura por `npm run verify:lp` (**read-only**, inclusive em um clone sem build). Uma versão desconhecida exige conciliação do recibo. Rollback só pode restaurar a versão anterior se o deployment canônico ainda for o deployment que se pretende reverter; preserve mudanças posteriores.
 
-Para um preview independente, `npm run deploy:preview` usa `scripts/deploy.mjs` e o projeto próprio `paginas-influenciadoras`, com dry-run/apply por hash. Esse upload não publica as rotas finais no `lp`.
+`npm run deploy:preview` usa o projeto independente `paginas-influenciadoras` com dry-run/apply por hash; não publica no domínio final. `npm run verify:published` relê esse preview. O workspace de operações também oferece `influenciadoras:publish:lp` e `influenciadoras:mirror` para integrar os recibos e conservar a fonte local compartilhada.
 
-Para o preview independente, `npm run verify:published` relê o deployment e seus hashes usando `.runtime/current-deployment.json`. Para as URLs finais, use `npm run verify:lp` e o recibo `.runtime/lp-current.json`. Ambos são read-only e não criam outra versão.
+## Campanhas existentes
 
-## Validação no celular
+[Cássia Kawamura](https://lp.joaoemariaeditora.com.br/combo-da-cassia-kawamura/) tem dez livros. [Forja Diária](https://lp.joaoemariaeditora.com.br/combo-da-forja-diaria/) começa com oito, sem A Loja da Dona Miloca e Fábulas de Esopo para os Pitiquinhos. Não reintroduza os dois livros nem artes da composição antiga. A ampliação futura precisa atualizar cadastro comercial, composição, preços e imagens juntos.
 
-Conferir primeiro320/390/412px, depois768/1440px: fontes, imagens, ausência de rolagem horizontal, botões de oferta, foco, navegação por teclado e swipe/setas do carrossel. Em QA, bloquear destinos externos para não emitir analytics nem abrir a loja. `npm run build` valida referências locais, preços, estado comercial, canonical e budgets de HTML/JS/artefato. O arquivo público `release-manifest.json` identifica hashes e commit, sem credenciais.
+`npm run assets` prepara a recomposição das quatro artes da Forja; `-- --apply --plan-hash HASH` grava os arquivos exatos e `-- --check` apenas confere fontes, composição e hashes. Não recria capas. As regras comerciais40% público/60% assinantes e os produtos existentes pertencem a essas campanhas; uma nova página começa sem herdá-los.
 
-## Origem
+Origem: material J&M de26/11/2026 (`entrega-TI_combos-cassia-e-forja_2026-11-26.zip`), com manifesto em `config/source-manifest.json`. As seis páginas antigas em outra hospedagem permanecem fora desta entrega.
 
-Material fornecido pela J&M em26/11/2026: `entrega-TI_combos-cassia-e-forja_2026-11-26.zip`. O hash e as revisões estão em `config/source-manifest.json`. A versão inicial preservou copy, artes e seções; a revisão autorizada da Forja retirou dois livros indisponíveis, recalculou os valores e recompôs as artes com oito capas. CSS e runtime são compartilhados, fontes/imagens são locais e as imagens têm dimensões intrínsecas. A fonte incremental legada do ZIP não é executada pelo projeto Astro.
-
-Documentação oficial: [Astro](https://docs.astro.build/en/guides/deploy/cloudflare/), [Cloudflare Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/).
+Referências: [Astro](https://docs.astro.build/en/guides/deploy/cloudflare/), [Cloudflare Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/).

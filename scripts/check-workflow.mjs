@@ -1,0 +1,11 @@
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {json,root} from './project.mjs';
+import path from 'node:path';
+const pkg=await json('package.json'),read=f=>fs.readFile(path.join(root,f),'utf8');
+const skill=await read('.agents/skills/jm-influencer-pages/SKILL.md'),agents=await read('AGENTS.md');
+assert(/^---\nname: jm-influencer-pages\ndescription: .+\n/m.test(skill));
+for(const cmd of ['page:create','publication:record','build','test','repository','deploy','verify:lp'])assert(pkg.scripts[cmd]&&skill.includes('npm '+(cmd==='test'?'test':'run '+cmd)),'Document the working command: '+cmd);
+assert(agents.includes('.agents/skills/jm-influencer-pages/SKILL.md')&&skill.includes('https://lp.joaoemariaeditora.com.br'));
+assert(!/Daniela|Yone|Thaís|supervisor/iu.test(agents+skill),'Keep personal work assignments out of the technical workflow');
+console.log(JSON.stringify({ok:true,mode:'read-only',skill:'jm-influencer-pages',commandsVerified:7,externalRequests:0}));

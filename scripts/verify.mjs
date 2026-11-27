@@ -3,8 +3,9 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import { root, files, sha, json, write, git, config } from './project.mjs';
 import { validatePage } from '../src/lib/landing.mjs';
+import {validateRegistry,expectedCtas} from '../src/lib/page-registry.mjs';
 const c = await config(), pages = await json('src/content/pages.json');
-assert.equal(pages.length, 2); assert.equal(new Set(pages.map(p => p.slug)).size, pages.length);
+validateRegistry(pages);
 const rows = (await files(path.join(root, 'dist'))).filter(f => f.path !== 'release-manifest.json');
 const byPath = new Map(rows.map(f => [f.path, f]));
 for (const page of pages) {
@@ -21,22 +22,24 @@ for (const page of pages) {
     const list = html.match(/<ol class="lista">([\s\S]*?)<\/ol>/)?.[1];
     assert(list, 'Book list missing');
     assert.deepEqual([...list.matchAll(/<img[^>]+src="([^"]+)"/g)].map(m => m[1]), page.composition.books.map(b => b.cover), 'Page and artwork must show the same ordered book composition');
-    assert(html.includes(`Conheça os ${page.composition.books.length} títulos`) && html.includes(`${page.composition.books.length} livros da Editora`), 'Book count changed');
-    assert(!/Esopo|Miloca|10 (?:livros|títulos)/i.test(html), 'Excluded books must not remain in the current Forja page');
+    if(page.key==='forja-diaria'){
+      assert(html.includes(`Conheça os ${page.composition.books.length} títulos`) && html.includes(`${page.composition.books.length} livros da Editora`), 'Book count changed');
+      assert(!/Esopo|Miloca|10 (?:livros|títulos)/i.test(html), 'Excluded books must not remain in the current Forja page');
+    }
     const artwork = await json('config/compositions-manifest.json');
-    assert(artwork.outputs.some(o => o.path === page.heroImage) && artwork.outputs.some(o => o.path === page.socialImage));
+    if(page.key==='forja-diaria')assert(artwork.outputs.some(o => o.path === page.heroImage) && artwork.outputs.some(o => o.path === page.socialImage));
     for (const output of artwork.outputs) {
       assert.equal(byPath.get(output.path.slice(1))?.sha256, output.sha256, 'Artwork in release changed');
     }
   }
   const priceNotice = html.includes('PREÇO PROVISÓRIO');
   if (page.status === 'draft') {
-    assert(html.includes('noindex, nofollow') && priceNotice, 'Draft must retain its publication/price state');
+    assert(html.includes('noindex, nofollow') && (priceNotice||page.template==='campaign'&&html.includes('RASCUNHO')), 'Draft must retain its publication/price state');
     assert(!html.includes('googletagmanager.com') && !html.includes('trackings.nemu.com.br'), 'Draft must not send commercial analytics');
-    assert.equal((html.match(/href="#oferta"/g) || []).length, 5, 'Draft CTA changed');
+    assert.equal((html.match(/href="#oferta"/g) || []).length, expectedCtas(page), 'Draft CTA changed');
   } else {
     assert(!priceNotice && html.includes('data-produto-loja'));
-    assert.equal((html.match(/data-produto-loja/g) || []).length, 5, 'Every commercial CTA must use the verified product');
+    assert.equal((html.match(/data-produto-loja/g) || []).length, expectedCtas(page), 'Every commercial CTA must use the verified product');
     assert.equal((html.match(/href="#oferta"/g) || []).length, 0, 'Commercial CTA still points to the draft offer');
     assert.equal((html.match(/googletagmanager.com\/gtm.js/g) || []).length, 1);
     assert.equal((html.match(/trackings.nemu.com.br/g) || []).length, 1);

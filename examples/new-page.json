@@ -1,0 +1,13 @@
+{
+  "slug": "minha-nova-pagina",
+  "title": "Título da nova seleção",
+  "description": "Descrição aprovada da nova página da João & Maria.",
+  "headline": "Uma nova seleção para compartilhar boas histórias",
+  "lead": "Substitua este texto pelo conteúdo aprovado para a nova página.",
+  "heroImage": "/media/marca/logo-jm.png",
+  "imageAlt": "João & Maria Editora",
+  "ctaLabel": "Conhecer a oferta",
+  "sections": [
+    { "title": "Conheça a seleção", "body": "Inclua aqui a apresentação aprovada, os livros corretos e as informações reais da campanha." }
+  ]
+}

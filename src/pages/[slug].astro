@@ -1,9 +1,11 @@
 ---
 import pages from '../content/pages.json';
 import InfluencerLanding from '../layouts/InfluencerLanding.astro';
+import '../styles/campaign.css';
+import {validateRegistry} from '../lib/page-registry.mjs';
 const bodies = import.meta.glob('../content/*.html', { query: '?raw', import: 'default', eager: true });
 export function getStaticPaths() {
-  return pages.map(page => ({ params: { slug: page.slug }, props: { page } }));
+  return validateRegistry(pages).map(page => ({ params: { slug: page.slug }, props: { page } }));
 }
 const { page } = Astro.props;
 const content = bodies['../content/' + page.key + '.html'];

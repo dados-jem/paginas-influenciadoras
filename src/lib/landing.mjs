@@ -1,3 +1,5 @@
+import {validateIdentity} from './page-registry.mjs';
+import {campaignOffer} from './campaign-template.mjs';
 export const amount = value => Number(value).toFixed(2).replace('.', ',');
 export function priceValues(page) {
   const p = page.pricing;
@@ -6,9 +8,11 @@ export function priceValues(page) {
   return { full: amount(p.full), retail: amount(retail), subscriber: amount(subscriber), retailInstallment: amount(retail / p.installments), subscriberInstallment: amount(subscriber / p.installments) };
 }
 export function validatePage(page) {
-  if (!/^[a-z0-9-]+$/.test(page.slug) || !/^[a-z0-9-]+$/.test(page.key)) throw Error('Invalid page identity');
+  validateIdentity(page.slug);validateIdentity(page.key);
   if (!['draft', 'published'].includes(page.status)) throw Error('Invalid publication status');
   const p = page.pricing;
+  if(page.template==='campaign'&&page.status==='draft'&&p===null){if(page.productUrl)throw Error('Draft without verified prices cannot carry a product destination');return page;}
+  if(!p)throw Error('Verified commercial pricing is required');
   if (!Number.isFinite(p.full) || p.full <= 0 || !Number.isInteger(p.installments) || p.installments < 1) throw Error('Invalid pricing');
   for (const k of ['retailDiscount', 'subscriberDiscount']) if (!Number.isFinite(p[k]) || p[k] < 0 || p[k] >= 100) throw Error('Invalid discount');
   if (page.composition) {
@@ -26,8 +30,8 @@ export function validatePage(page) {
 export function renderLanding(raw, page) {
   validatePage(page);
   if (/<script\b|\son[a-z]+\s*=|javascript:/i.test(raw)) throw Error('Body content must not contain executable scripts');
-  let result = raw;
-  for (const [key, value] of Object.entries(priceValues(page))) result = result.replaceAll('{{price.' + key + '}}', value);
+  let result = page.template==='campaign'?raw.replaceAll('{{campaign.offer}}',campaignOffer(page)):raw;
+  if(page.pricing)for (const [key, value] of Object.entries(priceValues(page))) result = result.replaceAll('{{price.' + key + '}}', value);
   if (/\{\{price\./.test(result)) throw Error('Unresolved price placeholder');
   if (page.status === 'published') {
     const href = page.productUrl.replaceAll('&', '&amp;').replaceAll('"', '&quot;');

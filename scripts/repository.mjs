@@ -17,27 +17,19 @@ async function main() {
   const commit = await git('rev-parse', 'HEAD'), tree = await git('rev-parse', 'HEAD^{tree}');
   for (const file of (await git('ls-files')).split('\n')) assert(!/(?:^|\/)(?:\.env(?:\.|$)|node_modules|\.runtime)|\.(?:zip|pem|key)$/.test(file) || file === '.env.example', 'Credential/private file cannot be versioned');
   let repo = await api('repos/' + name);
-  if (repo) assert(repo.full_name === name && repo.owner.id === c.github.ownerId && repo.private && repo.permissions?.push && !repo.archived, 'Repository target mismatch');
-  else assert(user.login === c.github.owner && user.id === c.github.ownerId, 'Only the corporate owner can bootstrap the absent repository');
+  assert(repo?.full_name === name && repo.id===1473684173&&repo.owner.id === c.github.ownerId && repo.visibility===c.github.visibility && repo.permissions?.push && !repo.archived, 'Existing public repository target mismatch');
   const branch = repo ? await api('repos/' + name + '/git/ref/heads/main') : null;
   if (branch && branch.object.sha !== commit) {
     await git('merge-base', '--is-ancestor', branch.object.sha, commit);
   }
-  const plan = { actor: user.login, actorId: user.id, owner: c.github.owner, ownerId: c.github.ownerId, repository: name, private: true, repositoryId: repo?.id || null, createRepository: !repo, commit, tree, branch: 'main', previousCommit: branch?.object.sha || null, maxWrites: (repo ? 0 : 1) + (branch?.object.sha === commit ? 0 : 1) };
+  assert(repo,'The existing corporate repository must be present; this workflow does not recreate it');
+  const plan = { actor: user.login, actorId: user.id, owner: c.github.owner, ownerId: c.github.ownerId, repository: name, private: c.github.visibility==='private', repositoryId: repo?.id || null, createRepository: false, commit, tree, branch: 'main', previousCommit: branch?.object.sha || null, maxWrites: branch?.object.sha === commit ? 0 : 1 };
   const planHash = sha(JSON.stringify(plan)); await write('.runtime/repository-preview.json', { mode: 'dry-run', plan, planHash });
   if (!options.apply) { console.log(JSON.stringify({ ok: true, mode: 'dry-run', plan, planHash })); return; }
   assert.equal(options.planHash, planHash, 'Repository preview changed');
   const intentPath = '.runtime/repository-intents/' + planHash + '.json';
   let intent; try { intent = await json(intentPath); } catch (e) { if (e.code !== 'ENOENT') throw e; }
   assert(!intent || intent.state === 'verified', 'An uncertain repository write requires reread before another push');
-  if (!repo) {
-    await write(intentPath, { state: 'creating', plan, planHash });
-    let failed = false;
-    try { await run(gh, ['repo', 'create', name, '--private', '--description', 'Páginas das influenciadoras da João & Maria em Astro e Cloudflare Pages.'], opts); } catch { failed = true; }
-    repo = await api('repos/' + name);
-    assert(repo?.private && repo.owner.id === c.github.ownerId && (!failed || repo.size === 0), 'Repository creation requires read-only reconciliation');
-    await write(intentPath, { state: 'created', repositoryId: repo.id, plan, planHash });
-  }
   if (branch?.object.sha !== commit) {
     await write(intentPath, { state: 'pushing', repositoryId: repo.id, plan, planHash });
     const quote = value => "'" + value.replaceAll("'", "'\\''") + "'";
@@ -47,8 +39,8 @@ async function main() {
   }
   const after = await api('repos/' + name + '/git/ref/heads/main'), remoteCommit = await api('repos/' + name + '/git/commits/' + commit);
   assert.equal(after.object.sha, commit); assert.equal(remoteCommit.tree.sha, tree);
-  const remote = await api('repos/' + name); assert(remote.private && remote.owner.id === c.github.ownerId && remote.id === repo.id);
-  const report = { ok: true, mode: 'apply', verifiedAt: new Date().toISOString(), planHash, repository: name, repositoryId: repo.id, url: remote.html_url, private: true, branch: 'main', sourceCommit: commit, treeVerified: true, credentialExported: false };
+  const remote = await api('repos/' + name); assert(remote.visibility===c.github.visibility && remote.owner.id === c.github.ownerId && remote.id === repo.id);
+  const report = { ok: true, mode: 'apply', verifiedAt: new Date().toISOString(), planHash, repository: name, repositoryId: repo.id, url: remote.html_url, private: remote.private, branch: 'main', sourceCommit: commit, treeVerified: true, credentialExported: false };
   await write('.runtime/repository-verified.json', report); await write(intentPath, { state: 'verified', ...report }); console.log(JSON.stringify(report));
 }
 main().catch(error => { console.error(JSON.stringify({ ok: false, error: error.message?.slice(0, 400), rawCommandOutputDisclosed: false })); process.exitCode = 1; });
