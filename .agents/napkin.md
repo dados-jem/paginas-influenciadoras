@@ -14,3 +14,8 @@
 4. **[2026-11-26] O próximo colaborador precisa do recibo publicado**
    Do instead: registrar e versionar `npm run publication:record` após o
    sucesso. Uma versão canônica desconhecida é conciliada, sem full upload.
+
+5. **[2026-11-26] Preparo automático é o ponto de entrada do agente**
+   Do instead: executar iniciar.sh/iniciar.ps1 com apply/login e usar ./jm;
+   ferramentas ficam em .runtime/.pixi, com checksums e lockfile. Nunca
+   pedir cópia manual de token quando o login OAuth individual atender.

@@ -20,7 +20,10 @@
     "deploy": "node scripts/lp.mjs",
     "repository": "node scripts/repository.mjs",
     "deploy:preview": "node scripts/deploy.mjs",
-    "verify:lp": "node scripts/lp.mjs --verify"
+    "verify:lp": "node scripts/lp.mjs --verify",
+    "setup": "node scripts/bootstrap.mjs",
+    "doctor": "node scripts/jm.mjs doctor",
+    "login": "node scripts/jm.mjs login"
   },
   "dependencies": {
     "astro": "7.3.2"

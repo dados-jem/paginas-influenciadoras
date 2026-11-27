@@ -1,0 +1,13 @@
+[workspace]
+name = "jm-paginas-influenciadoras"
+channels = ["conda-forge"]
+platforms = ["linux-64", "linux-aarch64", "osx-64", "osx-arm64", "win-64"]
+requires-pixi = "==0.85.0"
+
+[dependencies]
+nodejs = "24.22.3.*"
+git = ">=2.50,<3"
+gh = ">=2.80,<3"
+
+[tasks]
+jm = "node scripts/jm.mjs"

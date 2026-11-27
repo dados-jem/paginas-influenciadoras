@@ -19,7 +19,8 @@ obrigatória neste fluxo técnico.
 ## Começar e criar
 
 1. Confira o remoto com `git remote -v`. Use sua própria autenticação GitHub.
-2. Instale o lockfile com `npm ci`. Consulte `npm run page:create -- --help`.
+2. Em uma tarefa autorizada de preparo/criação/edição, conduza o setup automático antes de trabalhar: macOS/Linux `sh iniciar.sh --apply --login`; Windows `powershell -NoProfile -ExecutionPolicy Bypass -File .\iniciar.ps1 -Apply -Login`. Uma consulta/revisão sem implementação não inicia instalação. O agente executa os passos técnicos; a pessoa conclui somente consentimento/login dos provedores quando necessário.
+   Use `./jm` (Windows: `.\jm.ps1`) para todos os comandos do projeto. Esse lançador ativa as versões locais e a autenticação individual, sem copiar credenciais. `./jm doctor --online` confirma conta, projeto e permissão GitHub sem publicar.
 3. Copie `examples/new-page.json` para um briefing local e preencha conteúdo
    aprovado, slug e imagens locais. Não copie depoimentos de outra campanha.
 4. `npm run page:create -- --file CAMINHO` faz dry-run offline.
@@ -63,7 +64,7 @@ obrigatória neste fluxo técnico.
 
 ## Credenciais
 
-Use acessos individuais. `CLOUDFLARE_ACCOUNT_ID` e `CLOUDFLARE_API_TOKEN` entram
+Use acessos individuais. O iniciador oferece `./jm login`, com perfil OAuth Wrangler `jm-influenciadoras`, limitado a Pages e leitura de identidade/conta. A renovação acontece pelo CLI oficial; o token só é entregue em memória ao processo que publica, com logs do Wrangler desativados. Não rode `wrangler auth token` manualmente nem exiba sua saída. Como alternativa, `CLOUDFLARE_ACCOUNT_ID` e `CLOUDFLARE_API_TOKEN` entram
 somente no ambiente privado de quem publica. Nunca grave tokens, cookies,
 Authorization, `.env`, e-mails de convite ou respostas privadas em Git, chat,
 logs, exemplos ou recibos públicos. Não crie integrações pagas nem amplie escopos.

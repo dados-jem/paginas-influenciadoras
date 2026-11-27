@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { config, json, sha, write, root, argumentsFor } from './project.mjs';
 import { prepareLpArtifact, nativeHash, manifestHash, mergeLpManifest,assertNoRedirectCollisions } from './lp-artifact.mjs';
 import {receiptsFile,selectReceipt,publicReceipt,localArtifactFor} from './publication-receipts.mjs';
+import {cloudflareEnvironment} from './auth.mjs';
 
 const canonicalPath = file => file.endsWith('/index.html') ? file.slice(0, -10) : file;
 const exists = async p => Boolean(await fs.stat(p).catch(() => null));
@@ -13,7 +14,8 @@ const options = verifyOnly ? { apply: false } : argumentsFor(process.argv.slice(
 let artifact = verifyOnly?null:await prepareLpArtifact();
 const pagePaths=artifact?.pages.map(p=>p+'index.html')||[];
 const owned=file=>pagePaths.includes(file)||file.startsWith(artifact.prefix);
-const accountId = process.env.CLOUDFLARE_ACCOUNT_ID, token = process.env.CLOUDFLARE_API_TOKEN;
+const credentialEnvironment=await cloudflareEnvironment();
+const accountId = credentialEnvironment.CLOUDFLARE_ACCOUNT_ID, token = credentialEnvironment.CLOUDFLARE_API_TOKEN;
 assert.equal(accountId, c.cloudflare.accountId); assert(token);
 const projectPath = '/pages/projects/jm-lp', apiRoot = 'https://api.cloudflare.com/client/v4/accounts/' + accountId;
 let writes = 0;

@@ -15,7 +15,7 @@ async function main() {
   assert.equal(await git('status', '--porcelain'), '', 'Commit reviewed source before pushing');
   assert.equal(await git('remote', 'get-url', 'origin'), 'https://github.com/' + name + '.git');
   const commit = await git('rev-parse', 'HEAD'), tree = await git('rev-parse', 'HEAD^{tree}');
-  for (const file of (await git('ls-files')).split('\n')) assert(!/(?:^|\/)(?:\.env(?:\.|$)|node_modules|\.runtime)|\.(?:zip|pem|key)$/.test(file) || file === '.env.example', 'Credential/private file cannot be versioned');
+  for (const file of (await git('ls-files')).split('\n')) assert(!/(?:^|\/)(?:\.env(?:\.|$)|node_modules|\.runtime|\.pixi)|\.(?:zip|pem|key)$/.test(file) || file === '.env.example', 'Credential/private file cannot be versioned');
   let repo = await api('repos/' + name);
   assert(repo?.full_name === name && repo.id===1473684173&&repo.owner.id === c.github.ownerId && repo.visibility===c.github.visibility && repo.permissions?.push && !repo.archived, 'Existing public repository target mismatch');
   const branch = repo ? await api('repos/' + name + '/git/ref/heads/main') : null;

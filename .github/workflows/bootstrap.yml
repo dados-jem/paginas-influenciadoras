@@ -1,0 +1,38 @@
+name: Validar preparo automático
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  setup:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preparo sem ferramentas globais (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: sh iniciar.sh --apply
+      - name: Preparo sem ferramentas globais (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./iniciar.ps1 -Apply
+      - name: Conferir replay e diagnóstico (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          sh iniciar.sh --apply
+          ./jm doctor
+          git diff --exit-code
+      - name: Conferir replay e diagnóstico (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          ./iniciar.ps1 -Apply
+          ./jm.ps1 doctor
+          git diff --exit-code

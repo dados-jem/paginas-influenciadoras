@@ -4,6 +4,7 @@ dist/
 .astro/
 .wrangler/
 .runtime/
+.pixi/
 .env
 .env.*
 !.env.example

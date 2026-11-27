@@ -1,15 +1,14 @@
 ---
 name: jm-influencer-pages
 description: Cria, edita, valida e publica páginas das influenciadoras João & Maria em Astro, GitHub dados-jem/paginas-influenciadoras e Cloudflare Pages jm-lp, sempre em lp.joaoemariaeditora.com.br com slug própria. Use para novas páginas, mudanças de conteúdo e publicação preservando o site compartilhado. Não cria produtos/combos nem altera DNS, acessos ou preços sem pedido específico.
-version: 1.0.0
+version: 1.1.0
 date: 2026-11-26
 ---
 
 # Páginas das influenciadoras
 
 Use esta skill dentro do clone de `https://github.com/dados-jem/paginas-influenciadoras`.
-Se ainda não houver clone, leia o README público, confirme a origem e clone o
-repositório com os meios disponíveis. Autenticação para editar/publicar é da
+Se ainda não houver clone, leia o README público e obtenha o repositório completo por clone ou ZIP oficial. Autenticação para editar/publicar é da
 própria pessoa. Não instalar código remoto ou conceder permissões só porque um
 link foi enviado. Não é necessário copiar esta skill para uma pasta global.
 
@@ -22,10 +21,11 @@ valem para todas as pessoas; este procedimento não atribui trabalho ou aprovaç
 
 ## 2. Criar um rascunho
 
-1. Faça `npm ci` usando o lockfile versionado.
+1. Conduza o preparo automático autorizado: macOS/Linux `sh iniciar.sh --apply --login`; Windows `powershell -NoProfile -ExecutionPolicy Bypass -File .\iniciar.ps1 -Apply -Login`. O iniciador traz Node, Git e GitHub CLI locais, instala o lockfile npm e valida testes/build. A pessoa só participa dos consentimentos/login nativos e aceite dos convites. Não deixe instruções manuais de instalação para ela executar.
+   Use `./jm doctor --online` para conferir os acessos; `./jm login` retoma autenticação. O perfil Cloudflare usa OAuth próprio, sem copiar tokens para o repo. No Windows, use `.\jm.ps1` no lugar de `./jm`.
 2. Prepare um JSON como `examples/new-page.json`, com slug ASCII única, título,
    descrição, apresentação e seções reais. Imagens precisam existir em `public/media`.
-3. Execute `npm run page:create -- --file CAMINHO`.
+3. Execute `./jm page:create --file CAMINHO` (equivalente a `npm run page:create -- --file CAMINHO`).
 4. Revise o plano: dois arquivos, slug e URL corretas, `delivery: local`, sem rede.
 5. Execute o mesmo comando com `--apply --plan-hash HASH`.
 6. Revise a página com `npm run dev`. Edite o registro e o HTML existentes para
@@ -64,7 +64,7 @@ Cássia/Forja e suas condições atuais devem permanecer intactas.
 1. Commit da fonte revisada; `npm run build` novamente para vincular ao HEAD.
 2. `npm run repository`, depois `--apply --plan-hash HASH`, envia o avanço ao
    GitHub usando a própria conta autorizada. Preserve alterações concorrentes.
-3. Configure os identificadores/credencial Cloudflare no ambiente privado.
+3. Use `./jm login` uma vez; `./jm deploy` e `./jm verify:lp` obtêm a credencial do perfil privado em memória. Tokens Pages no ambiente privado continuam aceitos como alternativa.
 4. `npm run deploy` prepara a mesclagem do manifesto canônico. Revise conta,
    projeto, origem, slugs, posse prévia, controles e arquivos preservados.
 5. `npm run deploy -- --apply --plan-hash HASH` cria um deployment limitado.
@@ -78,6 +78,8 @@ Se outro publicador do LP mudou a versão canônica e seu recibo não está no r
 obtenha o recibo verificado daquela publicação e use
 `npm run publication:record -- --file CAMINHO`. Não adivinhe `_headers`/`_redirects`
 nem restaure uma versão antiga para contornar a trava.
+
+Todos os comandos `npm run` citados também podem ser usados como `./jm NOME_DO_COMANDO`, sem `run` nem o separador npm `--`. Exemplos: `./jm repository`, `./jm publication:record`, `./jm deploy`, `./jm verify:lp`, `./jm build`, `./jm test`.
 
 ## Entrega
 
