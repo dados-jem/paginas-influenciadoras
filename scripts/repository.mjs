@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import { config, run, root, git, sha, write, json, argumentsFor } from './project.mjs';
+import { config, run, root, git, sha, write, json, argumentsFor,isExpectedRepositoryOrigin } from './project.mjs';
 async function main() {
   const options = argumentsFor(process.argv.slice(2)), c = await config(), name = c.github.owner + '/' + c.github.repository;
   const gh = process.env.GITHUB_CLI_BIN || 'gh';
@@ -13,7 +13,7 @@ async function main() {
   }
   const user = await api('user'); assert(typeof user?.login === 'string' && Number.isSafeInteger(user.id), 'GitHub identity not confirmed');
   assert.equal(await git('status', '--porcelain'), '', 'Commit reviewed source before pushing');
-  assert.equal(await git('remote', 'get-url', 'origin'), 'https://github.com/' + name + '.git');
+  assert(isExpectedRepositoryOrigin(await git('remote', 'get-url', 'origin')),'GitHub origin mismatch');
   const commit = await git('rev-parse', 'HEAD'), tree = await git('rev-parse', 'HEAD^{tree}');
   for (const file of (await git('ls-files')).split('\n')) assert(!/(?:^|\/)(?:\.env(?:\.|$)|node_modules|\.runtime|\.pixi)|\.(?:zip|pem|key)$/.test(file) || file === '.env.example', 'Credential/private file cannot be versioned');
   let repo = await api('repos/' + name);

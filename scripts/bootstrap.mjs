@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {parseArgs} from 'node:util';
-import {root,sha,write,config} from './project.mjs';
+import {root,sha,write,config,isExpectedRepositoryOrigin} from './project.mjs';
 import {quiet,npm} from './local-runtime.mjs';
 const ignored=new Set(['.git','.runtime','.pixi','node_modules','dist','.astro','.wrangler','.DS_Store']);
 export async function sourceFingerprint(directory=root){
@@ -15,7 +15,7 @@ export function snapshotMatches(expected,actual){assert.equal(expected.length,ac
 async function readState(){try{return JSON.parse(await fs.readFile(path.join(root,'.runtime/setup-state.json'),'utf8'));}catch(e){if(e.code==='ENOENT')return null;throw e;}}
 export async function prepareSetup(){
  const c=await config(),pkg=JSON.parse(await fs.readFile(path.join(root,'package.json'),'utf8'));assert.equal(pkg.name,'@joao-maria/paginas-influenciadoras');assert.equal(process.versions.node.split('.')[0],'24','Use o iniciador para obter Node24.');
- const ownGit=Boolean(await fs.lstat(path.join(root,'.git')).catch(()=>null));if(ownGit)assert.equal(await quiet('git',['remote','get-url','origin']),'https://github.com/dados-jem/paginas-influenciadoras.git','Repositório de origem divergente');
+ const ownGit=Boolean(await fs.lstat(path.join(root,'.git')).catch(()=>null));if(ownGit)assert(isExpectedRepositoryOrigin(await quiet('git',['remote','get-url','origin'])),'Repositório de origem divergente');
  const before=await readState(),lockSha256=sha(await fs.readFile(path.join(root,'package-lock.json'))),valid=await dependenciesValid(),moduleInfo=await fs.lstat(path.join(root,'node_modules')).catch(()=>null);
  if(moduleInfo?.isSymbolicLink())assert(valid,'Dependências compartilhadas incompletas; o iniciador preservou o symlink.');
  const sourceHash=await sourceFingerprint(),installDependencies=moduleInfo?.isSymbolicLink()?false:!valid||before?.lockSha256!==lockSha256;

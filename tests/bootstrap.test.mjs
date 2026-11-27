@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {root} from '../scripts/project.mjs';
+import {root,isExpectedRepositoryOrigin} from '../scripts/project.mjs';
 import {sourceFingerprint,dependenciesValid,snapshotMatches} from '../scripts/bootstrap.mjs';
 import {parseWranglerCredential,verifyAccess,oauthScopes} from '../scripts/auth.mjs';
 import {quiet,runtimeEnv} from '../scripts/local-runtime.mjs';
 async function fixture(t){const runtime=path.join(root,'.runtime');await fs.mkdir(runtime,{recursive:true});const directory=await fs.mkdtemp(path.join(runtime,'test-bootstrap-'));t.after(()=>fs.rm(directory,{recursive:true,force:true}));return directory;}
+test('normal GitHub clone and Actions origin formats identify the same exact repository',()=>{for(const suffix of ['', '.git'])assert(isExpectedRepositoryOrigin('https://github.com/dados-jem/paginas-influenciadoras'+suffix));for(const value of ['https://github.com/another/paginas-influenciadoras','https://github.com/dados-jem/another','https://credential@github.com/dados-jem/paginas-influenciadoras.git','https://example.org/dados-jem/paginas-influenciadoras.git','https://github.com/dados-jem/paginas-influenciadoras?token=fixture'])assert(!isExpectedRepositoryOrigin(value));});
 test('private runtime files and installed dependencies never invalidate or enter the source fingerprint',async t=>{
  const dir=await fixture(t);await fs.writeFile(path.join(dir,'package.json'),'{}');const initial=await sourceFingerprint(dir);
  for(const name of ['.runtime','.pixi','node_modules']){await fs.mkdir(path.join(dir,name));await fs.writeFile(path.join(dir,name,'private'),'test-only-private-value');}await fs.writeFile(path.join(dir,'.env.local'),'PRIVATE=test-only-value');assert.equal(await sourceFingerprint(dir),initial);

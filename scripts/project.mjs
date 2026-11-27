@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 export const root = path.resolve(import.meta.dirname, '..');
 export const run = promisify(execFile);
 export const sha = value => crypto.createHash('sha256').update(value).digest('hex');
+export const isExpectedRepositoryOrigin=value=>typeof value==='string'&&/^https:\/\/github\.com\/dados-jem\/paginas-influenciadoras(?:\.git)?$/.test(value);
 export const json = async file => JSON.parse(await fs.readFile(path.join(root, file), 'utf8'));
 export const write = async (file, value) => { const p = path.join(root, file); await fs.mkdir(path.dirname(p), { recursive: true }); await fs.writeFile(p, JSON.stringify(value, null, 2) + '\n', { mode: 0o600 }); };
 export async function config() {
